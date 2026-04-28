@@ -1,14 +1,23 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { Navbar } from '@/components/navbar'
+import { Footer } from '@/components/footer'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: '--font-inter'
+})
+
+const playfair = Playfair_Display({ 
+  subsets: ["latin"],
+  variable: '--font-playfair'
+})
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Picado Fino | Parrilla Argentina Premium',
+  description: 'Experiencia gastronómica premium de parrilla argentina. Asado, pollo a la brasa y empanadas artesanales en un ambiente exclusivo.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -35,9 +44,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="es" className={`${inter.variable} ${playfair.variable} bg-background`}>
       <body className="font-sans antialiased">
-        {children}
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
