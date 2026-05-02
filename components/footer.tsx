@@ -33,19 +33,19 @@ const restaurants = [
   },
 ]
 
-// Restaurant-specific nav links
-const restaurantNavLinks = [
-  { href: "/menu", label: "Menú" },
-  { href: "/galeria", label: "Galería" },
-  { href: "/opiniones", label: "Opiniones" },
-]
-
 export function Footer() {
   const pathname = usePathname()
   
   // Determine if we're on homepage or a restaurant page
   const isHomepage = pathname === "/"
   const currentRestaurant = restaurants.find(r => pathname.startsWith(r.href))
+  const restaurantNavLinks = currentRestaurant
+    ? [
+        { href: `${currentRestaurant.href}/menu`, label: "Menú" },
+        { href: `${currentRestaurant.href}/galeria`, label: "Galería" },
+        { href: `${currentRestaurant.href}/opiniones`, label: "Opiniones" },
+      ]
+    : []
 
   // Homepage: neutral footer
   if (isHomepage) {
