@@ -16,8 +16,8 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Picado Fino | Parrilla Argentina Premium',
-  description: 'Experiencia gastronómica premium de parrilla argentina. Asado, pollo a la brasa y empanadas artesanales en un ambiente exclusivo.',
+  title: 'Picado Fino | Parrilla Argentina - Dos Experiencias Únicas',
+  description: 'Dos experiencias gastronómicas unidas por el fuego y la tradición. Picado Fino para ocasiones especiales y La Esquina de Picado para momentos casuales.',
   generator: 'v0.app',
   icons: {
     icon: [

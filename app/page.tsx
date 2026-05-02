@@ -2,59 +2,23 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { MessageCircle, ArrowRight, Star, Flame, ChefHat, Wine } from "lucide-react"
+import { ArrowRight, Flame, Heart, Users } from "lucide-react"
 
-const WHATSAPP_URL = "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa"
-
-const highlights = [
+const values = [
   {
-    title: "Asado",
-    description: "Cortes premium de carne argentina, cocinados a la perfección sobre las brasas.",
-    image: "/images/asado.jpg",
     icon: Flame,
+    title: "Fuego Auténtico",
+    description: "Cocinamos sobre brasas de quebracho, respetando la tradición del asado argentino.",
   },
   {
-    title: "Pollo a la Brasa",
-    description: "Pollo de campo marinado con hierbas, dorado lentamente sobre fuego de leña.",
-    image: "/images/pollo.jpg",
-    icon: ChefHat,
+    icon: Heart,
+    title: "Pasión por la Calidad",
+    description: "Seleccionamos cada ingrediente con dedicación, trabajando con productores locales.",
   },
   {
-    title: "Empanadas",
-    description: "Empanadas artesanales con recetas tradicionales y rellenos únicos.",
-    image: "/images/empanadas.jpg",
-    icon: ChefHat,
-  },
-  {
-    title: "Vinos & Bebidas",
-    description: "Selección curada de Malbecs y vinos premium de bodegas argentinas.",
-    image: "/images/bebidas.jpg",
-    icon: Wine,
-  },
-]
-
-const galleryImages = [
-  "/images/gallery-1.jpg",
-  "/images/gallery-2.jpg",
-  "/images/gallery-3.jpg",
-  "/images/gallery-4.jpg",
-]
-
-const testimonials = [
-  {
-    name: "María González",
-    comment: "La mejor experiencia de parrilla que he tenido. El bife de chorizo estaba perfecto, jugoso y con ese sabor ahumado único. Volveré sin duda.",
-    rating: 5,
-  },
-  {
-    name: "Carlos Rodríguez",
-    comment: "Ambiente increíble y atención impecable. Las empanadas son las más auténticas que probé fuera de Salta. Muy recomendado.",
-    rating: 5,
-  },
-  {
-    name: "Ana Martínez",
-    comment: "El pollo a la brasa es espectacular. La piel crujiente y la carne jugosa. El mejor lugar para una cena especial.",
-    rating: 5,
+    icon: Users,
+    title: "Experiencia Compartida",
+    description: "Creemos que la mejor comida se disfruta en compañía. Cada mesa es una celebración.",
   },
 ]
 
@@ -80,22 +44,14 @@ export default function HomePage() {
             <span className="text-primary">FINO</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 font-light">
-            La experiencia premium de parrilla argentina. Tradición, fuego y pasión en cada corte.
+            Tradición, fuego y pasión. Dos experiencias gastronómicas únicas para cada momento.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Reservar por WhatsApp
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-border text-foreground hover:bg-secondary text-lg px-8 py-6">
-              <Link href="/menu">
-                Ver Menú
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-            </Button>
-          </div>
+          <Button asChild variant="outline" size="lg" className="border-border text-foreground hover:bg-secondary text-lg px-8 py-6">
+            <a href="#restaurantes">
+              Descubrir Nuestros Restaurantes
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </a>
+          </Button>
         </div>
 
         {/* Scroll indicator */}
@@ -106,173 +62,203 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Experience Section */}
+      {/* Brand Story Section */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
               <Image
-                src="/images/experience.jpg"
-                alt="Experiencia gastronómica premium"
+                src="/images/story.jpg"
+                alt="Origen de Picado Fino"
                 fill
                 className="object-cover"
               />
             </div>
             <div className="space-y-6">
               <span className="text-primary text-sm font-semibold uppercase tracking-wider">
-                Nuestra Experiencia
+                Nuestro Origen
               </span>
               <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-                Donde el fuego se encuentra con la tradición
+                Donde nace la tradición
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                En Picado Fino, cada corte cuenta una historia. Nuestra parrilla es el corazón de una experiencia gastronómica que fusiona las técnicas ancestrales del asado argentino con una presentación contemporánea y elegante.
+                Picado Fino nació de un sueño compartido: traer la esencia del asado argentino a espacios donde la tradición se encuentra con la experiencia contemporánea. Nuestra historia comenzó alrededor del fuego, donde cada corte de carne cuenta una historia.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Seleccionamos los mejores cortes de carne de productores locales, madurados a la perfección y cocinados sobre brasas de quebracho. El resultado: sabores profundos, texturas perfectas y momentos inolvidables.
+                Hoy, ese sueño se expande con dos propuestas únicas: la elegancia de Picado Fino y la accesibilidad de La Esquina de Picado. Dos experiencias, una misma pasión.
               </p>
-              <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground mt-4">
-                <Link href="/nosotros">
-                  Conocer Más
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Highlights Grid */}
+      {/* Philosophy Section */}
       <section className="py-24 bg-card">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 order-2 lg:order-1">
+              <span className="text-primary text-sm font-semibold uppercase tracking-wider">
+                Nuestra Filosofía
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+                Creemos en lo auténtico
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Rechazamos los atajos. No usamos aditivos ni técnicas que comprometan la integridad del producto. El tiempo, el fuego y el conocimiento son nuestros únicos aliados.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Trabajamos directamente con ganaderos y productores que comparten nuestra visión de calidad. Cada corte que llega a nuestras parrillas ha sido seleccionado y madurado con el cuidado que merece.
+              </p>
+            </div>
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden order-1 lg:order-2">
+              <Image
+                src="/images/philosophy.jpg"
+                alt="Nuestra filosofía"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section className="py-24 bg-background">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-primary text-sm font-semibold uppercase tracking-wider">
-              Nuestras Especialidades
+              Nuestros Valores
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4">
-              Sabores que conquistan
+              Lo que nos define
             </h2>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {highlights.map((item) => (
-              <Card key={item.title} className="bg-secondary border-border overflow-hidden group cursor-pointer">
-                <div className="relative aspect-square overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <item.icon className="w-5 h-5 text-primary" />
-                      <h3 className="text-xl font-bold text-foreground">{item.title}</h3>
-                    </div>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {values.map((value, index) => (
+              <div key={index} className="text-center space-y-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <value.icon className="w-8 h-8 text-primary" />
                 </div>
-                <CardContent className="p-4">
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Preview */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-4">
-            <div>
-              <span className="text-primary text-sm font-semibold uppercase tracking-wider">
-                Galería
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4">
-                El arte del fuego
-              </h2>
-            </div>
-            <Button asChild variant="outline" className="border-border text-foreground hover:bg-secondary">
-              <Link href="/galeria">
-                Ver Galería Completa
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {galleryImages.map((image, index) => (
-              <div key={index} className="relative aspect-square rounded-lg overflow-hidden group">
-                <Image
-                  src={image}
-                  alt={`Galería ${index + 1}`}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors duration-300" />
+                <h3 className="text-xl font-bold text-foreground">{value.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{value.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Preview */}
-      <section className="py-24 bg-card">
+      {/* Restaurants Section */}
+      <section id="restaurantes" className="py-24 bg-card scroll-mt-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-primary text-sm font-semibold uppercase tracking-wider">
-              Opiniones
+              Dos Experiencias
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4">
-              Lo que dicen nuestros clientes
+              Nuestros Restaurantes
             </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-4">
+              Cada espacio está diseñado para un momento diferente. Elegí la experiencia que mejor se adapte a tu ocasión.
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-secondary border-border p-6">
-                <CardContent className="p-0 space-y-4">
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-primary text-primary" />
-                    ))}
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Picado Fino Card */}
+            <Link href="/picado-fino" className="group">
+              <Card className="bg-secondary border-border overflow-hidden h-full transition-all duration-300 hover:border-primary/50">
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src="/images/experience.jpg"
+                    alt="Picado Fino - Experiencia Premium"
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <span className="text-primary text-xs font-semibold uppercase tracking-wider">
+                      Experiencia Premium
+                    </span>
+                    <h3 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
+                      PICADO<span className="text-primary">FINO</span>
+                    </h3>
                   </div>
+                </div>
+                <CardContent className="p-6 space-y-4">
                   <p className="text-muted-foreground leading-relaxed">
-                    {`"${testimonial.comment}"`}
+                    Una experiencia gastronómica sofisticada donde el asado argentino se eleva a su máxima expresión. Cortes premium, ambiente elegante y atención personalizada para ocasiones especiales.
                   </p>
-                  <p className="text-foreground font-semibold">{testimonial.name}</p>
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-sm text-muted-foreground">Fine Dining / Parrilla Premium</span>
+                    <span className="text-primary font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+                      Ver restaurante
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button asChild variant="outline" className="border-border text-foreground hover:bg-secondary">
-              <Link href="/opiniones">
-                Ver Todas las Opiniones
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
+            </Link>
+
+            {/* La Esquina Card */}
+            <Link href="/la-esquina" className="group">
+              <Card className="bg-secondary border-border overflow-hidden h-full transition-all duration-300 hover:border-primary/50">
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src="/images/gallery-1.jpg"
+                    alt="La Esquina de Picado - Experiencia Casual"
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <span className="text-primary text-xs font-semibold uppercase tracking-wider">
+                      Experiencia Casual
+                    </span>
+                    <h3 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
+                      LA ESQUINA<span className="text-primary"> DE PICADO</span>
+                    </h3>
+                  </div>
+                </div>
+                <CardContent className="p-6 space-y-4">
+                  <p className="text-muted-foreground leading-relaxed">
+                    La misma calidad y pasión en un formato más relajado y accesible. Ideal para un almuerzo rápido, una salida con amigos o cuando querés disfrutar del mejor asado sin formalismos.
+                  </p>
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-sm text-muted-foreground">Casual / Rápido / Accesible</span>
+                    <span className="text-primary font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+                      Ver restaurante
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Banner */}
+      {/* CTA Section */}
       <section className="py-24 bg-primary">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
-            Reserva tu experiencia
+            Encontrá tu experiencia
           </h2>
           <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-            Déjate conquistar por los sabores del asado argentino. Reserva tu mesa y vive una experiencia gastronómica inolvidable.
+            Ya sea una cena elegante o un encuentro casual, tenemos el lugar perfecto para vos.
           </p>
-          <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90 text-lg px-8 py-6">
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="w-5 h-5 mr-2" />
-              Reservar por WhatsApp
-            </a>
-          </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90 text-lg px-8 py-6">
+              <Link href="/picado-fino">
+                Picado Fino
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-6">
+              <Link href="/la-esquina">
+                La Esquina de Picado
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>
