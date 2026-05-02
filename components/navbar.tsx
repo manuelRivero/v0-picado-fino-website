@@ -5,22 +5,8 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Menu, MessageCircle, ChevronDown } from "lucide-react"
+import { Menu, MessageCircle, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const navLinks = [
-  { href: "/", label: "Inicio" },
-  { href: "/menu", label: "Menú" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/galeria", label: "Galería" },
-  { href: "/opiniones", label: "Opiniones" },
-]
 
 const restaurants = [
   { 
@@ -37,14 +23,24 @@ const restaurants = [
   },
 ]
 
+// Restaurant-specific nav links (only shown on restaurant pages)
+const restaurantNavLinks = [
+  { href: "/menu", label: "Menú" },
+  { href: "/galeria", label: "Galería" },
+  { href: "/opiniones", label: "Opiniones" },
+]
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  // Determine current restaurant context
+  // Determine if we're on homepage or a restaurant page
+  const isHomepage = pathname === "/"
   const currentRestaurant = restaurants.find(r => pathname.startsWith(r.href))
-  const whatsappUrl = currentRestaurant?.whatsapp || restaurants[0].whatsapp
+  const otherRestaurant = currentRestaurant 
+    ? restaurants.find(r => r.href !== currentRestaurant.href)
+    : null
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,11 +52,12 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
           ? "bg-background/95 backdrop-blur-md border-b border-border"
           : "bg-transparent"
-      }`}
+      )}
     >
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
@@ -72,60 +69,73 @@ export function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors",
-                pathname === link.href 
-                  ? "text-foreground" 
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-          
-          {/* Restaurant Switcher Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
-                className="text-sm font-medium text-muted-foreground hover:text-foreground gap-1"
+          {isHomepage ? (
+            // Homepage: simplified navigation
+            <>
+              <a
+                href="#restaurantes"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 Restaurantes
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-popover border-border">
-              {restaurants.map((restaurant) => (
-                <DropdownMenuItem key={restaurant.href} asChild>
-                  <Link 
-                    href={restaurant.href}
-                    className={cn(
-                      "flex flex-col items-start gap-1 cursor-pointer",
-                      pathname.startsWith(restaurant.href) && "bg-secondary"
-                    )}
-                  >
-                    <span className="font-medium text-foreground">{restaurant.label}</span>
-                    <span className="text-xs text-muted-foreground">{restaurant.description}</span>
-                  </Link>
-                </DropdownMenuItem>
+              </a>
+              <Link
+                href="/nosotros"
+                className={cn(
+                  "text-sm font-medium transition-colors",
+                  pathname === "/nosotros" 
+                    ? "text-foreground" 
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Nosotros
+              </Link>
+            </>
+          ) : (
+            // Restaurant pages: full contextual navigation
+            <>
+              {restaurantNavLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "text-sm font-medium transition-colors",
+                    pathname === link.href 
+                      ? "text-foreground" 
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {link.label}
+                </Link>
               ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              
+              {/* Restaurant Switcher - link to other restaurant */}
+              {otherRestaurant && (
+                <Link
+                  href={otherRestaurant.href}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                >
+                  {otherRestaurant.label}
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              )}
+            </>
+          )}
         </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-4">
-          <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Reservar
-            </a>
-          </Button>
-        </div>
+        {/* Desktop CTA - only on restaurant pages */}
+        {!isHomepage && currentRestaurant && (
+          <div className="hidden md:flex items-center gap-4">
+            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <a href={currentRestaurant.whatsapp} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Reservar
+              </a>
+            </Button>
+          </div>
+        )}
+
+        {/* Spacer for homepage desktop to balance layout */}
+        {isHomepage && <div className="hidden md:block w-[100px]" />}
 
         {/* Mobile Menu */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -143,52 +153,94 @@ export function Navbar() {
                 </span>
               </Link>
               
-              {/* Main Navigation */}
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={cn(
-                    "text-lg font-medium transition-colors",
-                    pathname === link.href 
-                      ? "text-foreground" 
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              {/* Restaurant Links */}
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4">
-                  Nuestros Restaurantes
-                </p>
-                {restaurants.map((restaurant) => (
-                  <Link
-                    key={restaurant.href}
-                    href={restaurant.href}
+              {isHomepage ? (
+                // Homepage mobile: simplified navigation
+                <>
+                  <a
+                    href="#restaurantes"
                     onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "block py-2 transition-colors",
-                      pathname.startsWith(restaurant.href) 
-                        ? "text-foreground" 
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
+                    className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <span className="font-medium">{restaurant.label}</span>
-                    <span className="block text-xs text-muted-foreground">{restaurant.description}</span>
+                    Restaurantes
+                  </a>
+                  <Link
+                    href="/nosotros"
+                    onClick={() => setIsOpen(false)}
+                    className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Nosotros
                   </Link>
-                ))}
-              </div>
+                  
+                  {/* Restaurant quick links */}
+                  <div className="pt-4 border-t border-border">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4">
+                      Elegí tu experiencia
+                    </p>
+                    {restaurants.map((restaurant) => (
+                      <Link
+                        key={restaurant.href}
+                        href={restaurant.href}
+                        onClick={() => setIsOpen(false)}
+                        className="block py-2 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <span className="font-medium">{restaurant.label}</span>
+                        <span className="block text-xs text-muted-foreground">{restaurant.description}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                // Restaurant pages mobile: full contextual navigation
+                <>
+                  {currentRestaurant && (
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">
+                      {currentRestaurant.label}
+                    </p>
+                  )}
+                  
+                  {restaurantNavLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "text-lg font-medium transition-colors",
+                        pathname === link.href 
+                          ? "text-foreground" 
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
 
-              <Button asChild className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Reservar Mesa
-                </a>
-              </Button>
+                  {/* Restaurant Switcher */}
+                  {otherRestaurant && (
+                    <div className="pt-4 border-t border-border">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4">
+                        También visitá
+                      </p>
+                      <Link
+                        href={otherRestaurant.href}
+                        onClick={() => setIsOpen(false)}
+                        className="block py-2 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <span className="font-medium">{otherRestaurant.label}</span>
+                        <span className="block text-xs text-muted-foreground">{otherRestaurant.description}</span>
+                      </Link>
+                    </div>
+                  )}
+
+                  {currentRestaurant && (
+                    <Button asChild className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
+                      <a href={currentRestaurant.whatsapp} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Reservar Mesa
+                      </a>
+                    </Button>
+                  )}
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>
