@@ -79,7 +79,9 @@ export default function HomePage() {
             <span style={{ color: "var(--brand-yellow)" }}>Picado</span><br /><em style={{ fontStyle: "italic", color: "#ffffff" }}>Fino</em>
           </h1>
           <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", maxWidth: "480px", lineHeight: 1.5, marginBottom: "48px" }}>
-            Tradición, fuego y pasión. Dos experiencias gastronómicas únicas para cada momento.
+            Seguimos Construyendo mucho más que
+            <br />
+            un restaurante...
           </p>
           <div className="pf-hero-ctas" style={{ display: "flex", gap: "20px", alignItems: "center" }}>
             <a href="#restaurantes" className="pf-btn-primary pf-sans">Descubrir</a>
