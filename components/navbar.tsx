@@ -40,9 +40,8 @@ export function Navbar() {
       <nav className={isScrolled ? "scrolled" : ""}>
         <Link href="/" className="nav-logo">Picadofino</Link>
         <ul className="nav-links">
-          <li><a href="#restaurantes">Restaurantes</a></li>
-          <li><a href="#historia">Nosotros</a></li>
-          <li><a href="#equipo">Equipo</a></li>
+          <li><Link href="/picado-fino">Picado fino</Link></li>
+          <li><Link href="/la-esquina">La esquina de picado</Link></li>
         </ul>
       </nav>
     )

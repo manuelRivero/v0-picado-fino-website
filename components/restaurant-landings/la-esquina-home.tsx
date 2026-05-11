@@ -2,16 +2,29 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
+import { type MenuItem, type PublicBusiness, formatItemPrice, whatsappMeUrl } from "@/lib/api"
+import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 
-const WHATSAPP_URL =
+const MSG_WHATSAPP = "Hola quiero hacer un pedido en La Esquina de Picado"
+const MSG_PEDIDO =
+  "Hola quiero un pedido para llevar o a domicilio en La Esquina de Picado"
+
+const FALLBACK_WHATSAPP =
   "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20en%20La%20Esquina"
 
-const WHATSAPP_PEDIDO_URL =
+const FALLBACK_PEDIDO =
   "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20un%20pedido%20para%20llevar%20o%20a%20domicilio%20en%20La%20Esquina"
 
-type Props = { basePath: string; otherRestaurantPath: string }
+type Props = {
+  basePath: string
+  otherRestaurantPath: string
+  featuredItems: MenuItem[]
+  business: PublicBusiness | null
+}
 
-export function LaEsquinaHome({ otherRestaurantPath }: Props) {
+export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: Props) {
+  const waGeneral = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_WHATSAPP) ?? FALLBACK_WHATSAPP
+  const waPedido = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_PEDIDO) ?? FALLBACK_PEDIDO
   const heroRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 
@@ -63,11 +76,11 @@ export function LaEsquinaHome({ otherRestaurantPath }: Props) {
         />
         <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(12,10,8,0.95) 0%, rgba(12,10,8,0.2) 85%, rgba(12,10,8,0.55) 100%)" }} />
         <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "780px" }}>
-          <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--pf-amber)", marginBottom: "24px", display: "block" }}>
+          <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--brand-yellow)", marginBottom: "24px", display: "block" }}>
             Casual · Rápido · Accesible · Rosario
           </span>
           <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(52px, 7.5vw, 106px)", fontWeight: 700, lineHeight: 0.92, letterSpacing: "-0.02em", color: "var(--pf-cream)", marginBottom: "12px" }}>
-            La Esquina<br />de <em style={{ fontStyle: "italic", color: "var(--pf-amber-light)" }}>Picado</em>
+            La Esquina<br />de <em style={{ fontStyle: "italic", color: "var(--brand-yellow)" }}>Picado</em>
           </h1>
           <p className="pf-hero-subtitle-dim pf-serif" style={{ fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 400, fontStyle: "italic", color: "var(--pf-cream)", lineHeight: 1, marginBottom: "36px" }}>
             Sin formalismos.
@@ -76,14 +89,14 @@ export function LaEsquinaHome({ otherRestaurantPath }: Props) {
             La misma calidad y pasión de Picado Fino en un formato más relajado. Ideal para un almuerzo, una salida con amigos o cuando querés el mejor asado sin ceremonias.
           </p>
           <div className="pf-hero-ctas" style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans" style={{ color: "var(--pf-cream)" }}>
+            <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans" style={{ color: "var(--pf-cream)" }}>
               Ir a WhatsApp
             </a>
             <a href="#menu" className="pf-btn-ghost pf-sans">Ver carta</a>
           </div>
         </div>
         <div style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-          <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--pf-amber), transparent)" }} />
+          <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--brand-yellow), transparent)" }} />
           <span className="pf-sans" style={{ fontSize: "9px", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--pf-body-text)", writingMode: "vertical-rl", opacity: 0.4 }}>Scroll</span>
         </div>
       </section>
@@ -135,25 +148,22 @@ export function LaEsquinaHome({ otherRestaurantPath }: Props) {
           </p>
         </div>
         <div className="le-menu-list pf-reveal">
-          {[
-            { num: "01", name: "Choripán de la Casa", desc: "Chorizo artesanal, chimichurri, pan brioche a la parrilla", price: "$-/-" },
-            { num: "02", name: "Combo Almuerzo", desc: "Corte del día + ensalada + bebida + postre", price: "$-/-" },
-            { num: "03", name: "Entraña al Pan", desc: "Entraña tierna, provenzal, ciabatta tostada", price: "$-/-" },
-            { num: "04", name: "Media Tabla Parrillera", desc: "Morcilla, chorizo, vacío, mollejas — para compartir", price: "$-/-" },
-            { num: "05", name: "Bife a la Cruz", desc: "Cocción lenta, jugoso, papas rústicas", price: "$-/-" },
-            { num: "06", name: "Para Llevar: Asado Familiar", desc: "Tira de asado + vacío + chorizos + ensalada — hasta 4 personas", price: "$-/-" },
-          ].map(({ num, name, desc, price }) => (
-            <div key={num} className="le-menu-row">
-              <span className="le-menu-row-num pf-serif">{num}</span>
+          {featuredItems.map((item, i) => (
+            <div key={item.id} className="le-menu-row">
+              <span className="le-menu-row-num pf-serif">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <div>
-                <div className="le-menu-row-name pf-serif">{name}</div>
-                <div className="le-menu-row-desc pf-cormorant">{desc}</div>
+                <div className="le-menu-row-name pf-serif">{item.name}</div>
+                <div className="le-menu-row-desc pf-cormorant">{item.description}</div>
               </div>
-              <div className="le-menu-row-price pf-serif">{price}</div>
+              <div className="le-menu-row-price pf-serif">{formatItemPrice(item.prices)}</div>
             </div>
           ))}
         </div>
       </section>
+
+      {business ? <BusinessHoursLocation business={business} /> : null}
 
       {/* ===== AMBIENTE ===== */}
       <section className="le-ambiente">
@@ -199,7 +209,7 @@ export function LaEsquinaHome({ otherRestaurantPath }: Props) {
           <p className="pf-reveal pf-delay-2 pf-cormorant">
             Cuando no podés pasar por el mostrador, igual comés bien: mandanos un WhatsApp, armamos tu pedido al toque — para llevar o a domicilio — con el mismo fuego de siempre, sin protocolos ni vueltas.
           </p>
-          <a href={WHATSAPP_PEDIDO_URL} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
+          <a href={waPedido} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
             Hacer pedido por WhatsApp
           </a>
         </div>

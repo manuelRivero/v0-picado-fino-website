@@ -126,11 +126,6 @@
   }
 }
 
-/* Slim amber scrollbar — matches premium brand identity */
-::-webkit-scrollbar { width: 7px; }
-::-webkit-scrollbar-track { background: #0a0807; }
-::-webkit-scrollbar-thumb { background: oklch(0.65 0.12 58); }
-
 /* ============================================================
    DESIGN SYSTEM — variables (pf-* primary + design aliases)
    ============================================================ */
@@ -141,8 +136,9 @@
   --pf-carbon-light: #2c2825;
   --pf-cream:      #f5f0e8;
   --pf-cream-dim:  #e8e2d6;
-  --pf-amber:      oklch(0.65 0.12 58);
-  --pf-amber-light: oklch(0.75 0.10 58);
+  --brand-yellow:  #edd140;
+  --pf-amber:      var(--brand-yellow);
+  --pf-amber-light: var(--brand-yellow);
   --pf-body-text:  #c8c0b2;
 
   /* Aliases matching the design HTML's variable names — lets us paste design CSS verbatim */
@@ -160,6 +156,11 @@
   --font-sans:     var(--font-dm-sans);
   /* --font-cormorant already matches Next.js variable name */
 }
+
+/* Slim brand scrollbar */
+::-webkit-scrollbar { width: 7px; }
+::-webkit-scrollbar-track { background: #0a0807; }
+::-webkit-scrollbar-thumb { background: var(--brand-yellow); }
 
 /* ============================================================
    NAVBAR — verbatim from design
@@ -427,7 +428,7 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 }
 .pf-marquee-track {
   display: flex; white-space: nowrap;
-  animation: pf-marquee 25s linear infinite;
+  animation: pf-marquee 14s linear infinite;
 }
 .pf-marquee-item {
   display: inline-flex; align-items: center;
@@ -495,8 +496,19 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 }
 .pf-valores h2 em { font-style: italic; color: var(--pf-amber-light); }
 .pf-valores-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 1px; background: rgba(245,240,232,0.06);
+}
+@media (min-width: 640px) {
+  .pf-valores-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .pf-valores-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 .pf-valor-item {
   background: var(--pf-carbon-mid); padding: 56px 40px;
@@ -522,8 +534,12 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   border-top: 1px solid rgba(245,240,232,0.06);
 }
 .pf-equipo-header {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-  align-items: end; margin-bottom: 80px;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px;
+  align-items: start; margin-bottom: 80px;
+  max-width: 880px;
+}
+.pf-equipo-header h2 + .pf-equipo-header-text {
+  margin-top: 28px;
 }
 .pf-equipo-header h2 {
   font-size: clamp(42px, 5vw, 70px); font-weight: 700;
@@ -532,7 +548,7 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 .pf-equipo-header h2 em { font-style: italic; color: var(--pf-amber-light); }
 .pf-equipo-header-text {
   font-size: 20px; font-style: italic;
-  color: var(--pf-body-text); line-height: 1.7; align-self: end;
+  color: var(--pf-body-text); line-height: 1.7;
 }
 .pf-equipo-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
@@ -567,6 +583,21 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   transform: translateY(8px); transition: transform 0.4s ease;
 }
 .pf-chef-card:hover .pf-chef-info { transform: translateY(0); }
+.pf-chef-info--category {
+  padding-top: 48px;
+  background: linear-gradient(to top, rgba(10,8,7,0.97) 0%, rgba(10,8,7,0.5) 55%, transparent 100%);
+}
+.pf-chef-category-title {
+  font-size: 24px; font-weight: 600;
+  color: var(--pf-amber);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.pf-chef-category-desc {
+  font-size: 14px; font-style: italic;
+  color: rgba(245,240,232,0.88); line-height: 1.65;
+  white-space: pre-line; margin: 0;
+}
 .pf-chef-role {
   font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
   color: var(--pf-amber); margin-bottom: 8px;
@@ -608,7 +639,7 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   padding: 16px 42px; text-decoration: none;
   transition: background 0.3s, transform 0.3s; display: inline-block;
 }
-.pf-btn-amber:hover { background: var(--pf-amber-light); transform: translateY(-2px); }
+.pf-btn-amber:hover { background: color-mix(in srgb, var(--brand-yellow) 85%, #ffffff); transform: translateY(-2px); }
 .pf-btn-outline {
   font-size: 10px; font-weight: 400;
   letter-spacing: 0.22em; text-transform: uppercase;
@@ -631,10 +662,8 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
    INTERNAL RESTAURANT PAGES
    ============================================================ */
 
-/* La Esquina accent override (terracota) */
+/* La Esquina — fondos/carbono distintos; acento = brand yellow (heredado de :root) */
 .le-page {
-  --pf-amber:      oklch(0.58 0.14 30);
-  --pf-amber-light: oklch(0.68 0.12 30);
   --pf-carbon:     #0c0a08;
   --pf-carbon-mid: #1c1814;
   --pf-carbon-light: #2e2922;
@@ -923,3 +952,276 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   filter: brightness(0.5); transition: transform 0.8s ease, filter 0.5s; display: block;
 }
 .le-cta-cruce-right:hover img { transform: scale(1.03); filter: brightness(0.65); }
+
+/* ============================================================
+   RESPONSIVE — Tablet (max-width: 1023px)
+   ============================================================ */
+@media (max-width: 1023px) {
+  /* Nav */
+  nav { padding: 24px 32px; }
+  nav.scrolled { padding: 16px 32px; }
+
+  /* Footer */
+  footer { padding: 60px 32px 32px; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 52px; }
+  .footer-brand { grid-column: 1 / -1; }
+
+  /* Home — Manifiesto */
+  .pf-manifiesto { padding: 100px 32px; gap: 48px; }
+
+  /* Home — Restaurantes split */
+  .pf-rest-panel-content { padding: 40px 32px 48px; }
+
+  /* Home — Historia */
+  .pf-historia { padding: 100px 32px; gap: 60px; }
+
+  /* Home — Valores */
+  .pf-valores { padding: 100px 32px; }
+  .pf-valores h2 { margin-bottom: 60px; }
+  .pf-valor-item { padding: 44px 28px; }
+
+  /* Home — Equipo: 3 → 2 columnas */
+  .pf-equipo { padding: 100px 32px; }
+  .pf-equipo-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Home — CTA final */
+  .pf-cta-final { padding: 120px 32px; }
+
+  /* Marquee */
+  .pf-filosofia-marquee { padding: 60px 0; }
+
+  /* Páginas internas — Identidad */
+  .pf-identidad { padding: 100px 32px; gap: 60px; }
+
+  /* Páginas internas — Menú (Picado Fino) */
+  .pf-menu-section { padding: 100px 32px; }
+  .pf-menu-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 52px; }
+
+  /* Páginas internas — Experiencia: 3 → 2 columnas */
+  .pf-experiencia { padding: 100px 32px; }
+  .pf-exp-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+
+  /* Páginas internas — Galería: simplificar a 2 cols */
+  .pf-galeria-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 280px 280px 280px;
+  }
+  .pf-galeria-item:first-child { grid-row: auto; }
+
+  /* Páginas internas — CTAs */
+  .pf-reserva-cta { padding: 120px 32px; }
+  .pf-delivery-cta { padding: 120px 32px; }
+
+  /* La Esquina — Propuesta */
+  .le-propuesta { padding: 100px 32px; gap: 60px; }
+  .le-propuesta-stat { padding: 28px 32px; }
+
+  /* La Esquina — Menú casual */
+  .le-menu-casual { padding: 100px 32px; }
+  .le-menu-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 52px; }
+
+  /* La Esquina — Ambiente */
+  .le-ambiente-intro { padding: 80px 32px 60px; }
+
+  /* La Esquina — Mosaico: simplificar */
+  .le-ambiente-mosaic {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 240px 240px 240px;
+  }
+  .le-mosaic-item:nth-child(1) { grid-column: auto; grid-row: auto; }
+  .le-mosaic-item:nth-child(4) { grid-column: auto; }
+
+  /* La Esquina — CTA cruce */
+  .le-cta-cruce-left { padding: 80px 52px; }
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile (max-width: 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Nav — home */
+  nav { padding: 20px 20px; }
+  nav.scrolled { padding: 14px 20px; }
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 10px; letter-spacing: 0.12em; }
+
+  /* Nav — restaurante */
+  .nav-reserve { padding: 8px 14px; font-size: 9px; letter-spacing: 0.16em; }
+  .nav-restaurant-ctas { gap: 6px; }
+  nav.nav-restaurant .nav-logo { font-size: 14px; letter-spacing: 0.12em; }
+
+  /* Footer */
+  footer { padding: 52px 20px 28px; }
+  .footer-top { grid-template-columns: 1fr; gap: 36px; margin-bottom: 44px; }
+  .footer-brand { grid-column: auto; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  .footer-social { justify-content: center; }
+
+  /* Home — Hero contenido */
+  .pf-hero-ctas { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+  /* Home — Manifiesto: 2 cols → 1 col */
+  .pf-manifiesto {
+    padding: 80px 20px;
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .pf-manifiesto-text { margin-top: 20px; font-size: 18px; }
+  .pf-manifiesto-stats { grid-template-columns: 1fr 1fr; gap: 24px 16px; margin-top: 44px; padding-top: 32px; }
+  .pf-stat-number { font-size: 40px; }
+
+  /* Home — Restaurantes: 2 cols → 1 col apilado */
+  .pf-restaurantes { grid-template-columns: 1fr; height: auto; min-height: auto; }
+  .pf-rest-panel { min-height: 55vmax; }
+  .pf-rest-divider { display: none; }
+  .pf-rest-desc { opacity: 1; transform: none; }
+  .pf-rest-panel-content { padding: 32px 20px 40px; }
+
+  /* Home — Historia: 2 cols → 1 col */
+  .pf-historia { padding: 80px 20px; grid-template-columns: 1fr; gap: 44px; }
+  .pf-historia-image-accent { display: none; }
+  .pf-historia-text h2 { margin-bottom: 24px; }
+  .pf-historia-text p { font-size: 17px; }
+  .pf-historia-quote { padding: 24px 0 24px 24px; }
+  .pf-historia-quote p { font-size: 19px; }
+
+  /* Home — Valores */
+  .pf-valores { padding: 80px 20px; }
+  .pf-valores h2 { margin-bottom: 44px; }
+  .pf-valor-item { padding: 36px 20px; }
+  .pf-valor-title { font-size: 22px; }
+  .pf-valor-text { font-size: 15px; }
+
+  /* Home — Equipo: → 1 col */
+  .pf-equipo { padding: 80px 20px; }
+  .pf-equipo-grid { grid-template-columns: 1fr; }
+  .pf-equipo-header { margin-bottom: 44px; }
+
+  /* Home — CTA final */
+  .pf-cta-final { padding: 100px 20px; }
+  .pf-cta-final p { font-size: 18px; margin-bottom: 36px; }
+  .pf-cta-buttons { gap: 12px; }
+
+  /* Marquee */
+  .pf-filosofia-marquee { padding: 48px 0; }
+
+  /* Páginas internas — Identidad: 2 cols → 1 col */
+  .pf-identidad { padding: 80px 20px; grid-template-columns: 1fr; gap: 44px; }
+  .pf-identidad-caption { position: static; margin-top: 16px; right: auto; bottom: auto; }
+
+  /* Páginas internas — Menú grid: 2 cols → 1 col */
+  .pf-menu-section { padding: 80px 20px; }
+  .pf-menu-grid { grid-template-columns: 1fr; }
+  .pf-menu-item { padding: 28px 20px; }
+  .pf-menu-item-name { font-size: 18px; }
+
+  /* Páginas internas — Experiencia: → 1 col */
+  .pf-experiencia { padding: 80px 20px; }
+  .pf-exp-grid { grid-template-columns: 1fr; gap: 36px; }
+  .pf-experiencia h2 { margin-bottom: 44px; }
+
+  /* Páginas internas — Galería: → 1 col */
+  .pf-galeria-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 240px);
+  }
+  .pf-galeria-item:first-child { grid-row: auto; }
+
+  /* Páginas internas — CTAs */
+  .pf-reserva-cta { padding: 100px 20px; }
+  .pf-reserva-cta p { font-size: 18px; margin-bottom: 36px; }
+  .pf-delivery-cta { padding: 100px 20px; }
+  .pf-delivery-cta p { font-size: 18px; margin-bottom: 36px; }
+
+  /* La Esquina — Propuesta: 2 cols → 1 col */
+  .le-propuesta { padding: 80px 20px; grid-template-columns: 1fr; gap: 44px; }
+  .le-stat-big { font-size: 44px; }
+  .le-propuesta-stat { padding: 24px 24px; }
+
+  /* La Esquina — Menú casual */
+  .le-menu-casual { padding: 80px 20px; }
+  .le-menu-header { grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
+  .le-menu-row {
+    display: flex; flex-direction: column;
+    gap: 6px; padding: 20px 20px;
+  }
+  .le-menu-row-num { min-width: auto; }
+  .le-menu-row-name { font-size: 18px; }
+  .le-menu-row-desc { font-size: 13px; }
+  .le-menu-row-price { margin-top: 4px; }
+
+  /* La Esquina — Ambiente: 2 cols → 1 col */
+  .le-ambiente-intro { padding: 60px 20px 44px; grid-template-columns: 1fr; gap: 24px; }
+
+  /* La Esquina — Mosaico: 2 cols simplificado */
+  .le-ambiente-mosaic {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 180px 180px 180px;
+  }
+  .le-mosaic-item:nth-child(1) { grid-column: 1 / -1; }
+  .le-mosaic-item:nth-child(4) { grid-column: auto; }
+
+  /* La Esquina — CTA cruce: 2 cols → 1 col apilado */
+  .le-cta-cruce { grid-template-columns: 1fr; }
+  .le-cta-cruce-left { padding: 60px 20px; }
+  .le-cta-cruce-right { min-height: 280px; }
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile pequeño (max-width: 479px)
+   ============================================================ */
+@media (max-width: 479px) {
+  /* Nav logos reducidos */
+  .nav-logo { font-size: 14px; letter-spacing: 0.12em; }
+  .nav-links { display: none; }
+
+  /* Secciones aún más compactas */
+  .pf-manifiesto { padding: 64px 16px; }
+  .pf-historia { padding: 64px 16px; }
+  .pf-valores { padding: 64px 16px; }
+  .pf-equipo { padding: 64px 16px; }
+  .pf-cta-final { padding: 80px 16px; }
+  .pf-menu-section { padding: 64px 16px; }
+  .pf-experiencia { padding: 64px 16px; }
+  .pf-reserva-cta { padding: 80px 16px; }
+  .pf-delivery-cta { padding: 80px 16px; }
+  .pf-identidad { padding: 64px 16px; }
+  .le-propuesta { padding: 64px 16px; }
+  .le-menu-casual { padding: 64px 16px; }
+  .le-ambiente-intro { padding: 48px 16px 36px; }
+  .le-cta-cruce-left { padding: 48px 16px; }
+  footer { padding: 44px 16px 24px; }
+
+  /* Estadísticas aún más pequeñas */
+  .pf-stat-number { font-size: 34px; }
+  .le-stat-big { font-size: 38px; }
+
+  /* Panel de restaurante */
+  .pf-rest-panel-content { padding: 28px 16px 36px; }
+  .pf-rest-panel { min-height: 60vmax; }
+
+  /* Menú items */
+  .pf-menu-item { padding: 24px 16px; }
+  .le-menu-row { padding: 18px 16px; }
+
+  /* Valor items */
+  .pf-valor-item { padding: 28px 16px; }
+
+  /* Galería y mosaico: altura fija reducida */
+  .pf-galeria-grid { grid-template-rows: repeat(5, 200px); }
+  .le-ambiente-mosaic { grid-template-rows: 160px 160px 160px; }
+
+  /* Manifiesto stats en 1 columna */
+  .pf-manifiesto-stats { grid-template-columns: 1fr; gap: 20px; }
+
+  /* Historia quote */
+  .pf-historia-quote { padding: 20px 0 20px 18px; }
+
+  /* Identificación caption */
+  .pf-identidad-caption { padding: 14px 18px; }
+  .pf-identidad-caption strong { font-size: 15px; }
+
+  /* Propuesta stat */
+  .le-propuesta-stat { padding: 20px 16px; }
+  .le-cta-cruce-right { min-height: 220px; }
+}

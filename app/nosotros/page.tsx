@@ -1,24 +1,33 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Flame, Heart, Users } from "lucide-react"
+import { MessageCircle, Flame, Users, Handshake, Star } from "lucide-react"
 
 const WHATSAPP_URL = "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa"
 
 const values = [
   {
     icon: Flame,
-    title: "Fuego Auténtico",
-    description: "Cocinamos exclusivamente sobre brasas de quebracho, respetando la tradición del asado argentino.",
-  },
-  {
-    icon: Heart,
-    title: "Pasión por la Calidad",
-    description: "Seleccionamos cada ingrediente con dedicación, trabajando con productores locales de confianza.",
+    title: "La Calidad como Origen",
+    description:
+      "No hay secretos, hay selección. Elegimos cada corte y cada ingrediente con la obsesión de quien cocina para su familia. Desde nuestras brasas hasta el producto fresco de estación, el respeto por el insumo es nuestro primer compromiso.",
   },
   {
     icon: Users,
-    title: "Experiencia Compartida",
-    description: "Creemos que la mejor comida se disfruta en compañía. Cada mesa es una celebración.",
+    title: "El Arte de Reunirse",
+    description:
+      "Creemos que la mesa es el escenario donde sucede lo mejor de la vida. Diseñamos nuestro servicio para ser ese refugio donde se celebran los reencuentros y se disfruta del sabor de lo compartido. Aquí, el tiempo se detiene.",
+  },
+  {
+    icon: Handshake,
+    title: "Pasión en Sintonía",
+    description:
+      "La excelencia no es el logro de uno solo, sino el ritmo de muchos. Somos un equipo que trabaja con orgullo detrás de escena para que cada detalle funcione con la precisión de un reloj y el calor de un hogar.",
+  },
+  {
+    icon: Star,
+    title: "Tu Disfrute, Nuestra Meta",
+    description:
+      "Nuestra mayor recompensa es verte volver. Trabajamos para superar tus expectativas en cada visita, cuidando desde la recepción hasta el último brindis, porque sabemos que cada vez que nos elegís, nos confiás un momento especial.",
   },
 ]
 
@@ -129,7 +138,7 @@ export default function NosotrosPage() {
             Lo que nos define
           </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {values.map((value, index) => (
             <div key={index} className="text-center space-y-4">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">

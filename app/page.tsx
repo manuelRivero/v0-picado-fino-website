@@ -4,11 +4,12 @@ import { useEffect, useRef } from "react"
 import Link from "next/link"
 
 const marqueeItems = [
-  "Fuego Auténtico",
-  "Pasión Sin Atajos",
-  "Tradición Viva",
-  "Quebracho & Brasas",
-  "Rosario, Argentina",
+  "Hay equipo",
+  "Que vuelvas nos gusta",
+  "Compartiendo buenos momentos",
+  "Seguimos buscando gente extraordinaria",
+  "Parrilla restaurant",
+  "Rotiseria, delivery y comida al paso",
 ]
 
 export default function HomePage() {
@@ -74,11 +75,8 @@ export default function HomePage() {
           }}
         />
         <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "900px" }}>
-          <p className="pf-hero-label pf-sans" style={{ fontSize: "10px", letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--pf-amber)", marginBottom: "24px" }}>
-            Rosario · Parrilla Argentina
-          </p>
-          <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(64px, 9vw, 130px)", fontWeight: 700, lineHeight: 0.9, letterSpacing: "-0.02em", color: "var(--pf-cream)", marginBottom: "32px" }}>
-            Picado<br /><em style={{ fontStyle: "italic", color: "var(--pf-amber-light)" }}>Fino</em>
+          <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(64px, 9vw, 130px)", fontWeight: 700, lineHeight: 0.9, letterSpacing: "-0.02em", marginBottom: "32px" }}>
+            <span style={{ color: "var(--brand-yellow)" }}>Picado</span><br /><em style={{ fontStyle: "italic", color: "#ffffff" }}>Fino</em>
           </h1>
           <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", maxWidth: "480px", lineHeight: 1.5, marginBottom: "48px" }}>
             Tradición, fuego y pasión. Dos experiencias gastronómicas únicas para cada momento.
@@ -92,7 +90,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="pf-hero-scroll" style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-          <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--pf-amber), transparent)" }} />
+          <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--brand-yellow), transparent)" }} />
           <span className="pf-sans" style={{ fontSize: "9px", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--pf-body-text)", writingMode: "vertical-rl", opacity: 0.5 }}>Scroll</span>
         </div>
       </section>
@@ -192,7 +190,8 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ===== HISTORIA ===== */}
+      {/* ===== HISTORIA (Nuestro origen) — desactivado temporalmente ===== */}
+      {false && (
       <section className="pf-historia" id="historia">
         <div className="pf-historia-image-wrap pf-reveal">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -218,6 +217,7 @@ export default function HomePage() {
           </blockquote>
         </div>
       </section>
+      )}
 
       {/* ===== VALORES ===== */}
       <section className="pf-valores">
@@ -226,18 +226,23 @@ export default function HomePage() {
         <div className="pf-valores-grid">
           <div className="pf-valor-item pf-reveal">
             <div className="pf-valor-num pf-serif">01</div>
-            <h3 className="pf-valor-title pf-serif">Fuego Auténtico</h3>
-            <p className="pf-valor-text pf-cormorant">Cocinamos sobre brasas de quebracho, respetando la tradición del asado argentino en cada servicio.</p>
+            <h3 className="pf-valor-title pf-serif">La Calidad como Origen</h3>
+            <p className="pf-valor-text pf-cormorant">No hay secretos, hay selección. Elegimos cada corte y cada ingrediente con la obsesión de quien cocina para su familia. Desde nuestras brasas hasta el producto fresco de estación, el respeto por el insumo es nuestro primer compromiso.</p>
           </div>
           <div className="pf-valor-item pf-reveal pf-delay-1">
             <div className="pf-valor-num pf-serif">02</div>
-            <h3 className="pf-valor-title pf-serif">Pasión por la Calidad</h3>
-            <p className="pf-valor-text pf-cormorant">Seleccionamos cada ingrediente con dedicación, trabajando directamente con productores locales.</p>
+            <h3 className="pf-valor-title pf-serif">El Arte de Reunirse</h3>
+            <p className="pf-valor-text pf-cormorant">Creemos que la mesa es el escenario donde sucede lo mejor de la vida. Diseñamos nuestro servicio para ser ese refugio donde se celebran los reencuentros y se disfruta del sabor de lo compartido. Aquí, el tiempo se detiene.</p>
           </div>
           <div className="pf-valor-item pf-reveal pf-delay-2">
             <div className="pf-valor-num pf-serif">03</div>
-            <h3 className="pf-valor-title pf-serif">Experiencia Compartida</h3>
-            <p className="pf-valor-text pf-cormorant">Creemos que la mejor comida se disfruta en compañía. Cada mesa es una celebración.</p>
+            <h3 className="pf-valor-title pf-serif">Pasión en Sintonía</h3>
+            <p className="pf-valor-text pf-cormorant">La excelencia no es el logro de uno solo, sino el ritmo de muchos. Somos un equipo que trabaja con orgullo detrás de escena para que cada detalle funcione con la precisión de un reloj y el calor de un hogar.</p>
+          </div>
+          <div className="pf-valor-item pf-reveal pf-delay-3">
+            <div className="pf-valor-num pf-serif">04</div>
+            <h3 className="pf-valor-title pf-serif">Tu Disfrute, Nuestra Meta</h3>
+            <p className="pf-valor-text pf-cormorant">Nuestra mayor recompensa es verte volver. Trabajamos para superar tus expectativas en cada visita, cuidando desde la recepción hasta el último brindis, porque sabemos que cada vez que nos elegís, nos confiás un momento especial.</p>
           </div>
         </div>
       </section>
@@ -248,26 +253,43 @@ export default function HomePage() {
           <div>
             <div className="pf-section-label pf-sans pf-reveal">El equipo</div>
             <h2 className="pf-reveal pf-delay-1 pf-serif">
-              Las personas<br />detrás del <em>fuego</em>
+              Personas extraordinaria.<br />Hay equipo.
             </h2>
+            <p className="pf-equipo-header-text pf-cormorant pf-reveal pf-delay-2">
+              En Picadofino y La Esquina no solo servimos comida; creamos momentos. Para lograrlo,
+              reunimos personas extraordinarias que comparten una misma pasión: la excelencia sin
+              excusas. Aquí, el talento individual se potencia en la fuerza del equipo.
+            </p>
           </div>
-          <p className="pf-equipo-header-text pf-cormorant pf-reveal pf-delay-2">
-            Trabajamos con los mejores porque creemos que la excelencia se contagia. Nuestro equipo comparte una misma obsesión: la calidad sin concesiones.
-          </p>
         </div>
         <div className="pf-equipo-grid">
           {[
-            { role: "Maestro Parrillero", label: "foto chef\nprincipal" },
-            { role: "Sous Chef", label: "foto sous\nchef" },
-            { role: "Sommelier", label: "foto sommelier\n/ bartender" },
-          ].map(({ role, label }, i) => (
+            {
+              label: "foto\ncategoría",
+              categoryTitle: "Maestros del Fuego",
+              categoryBody:
+                "Son los guardianes de nuestra\ntradición, dominan el arte de las\nbrasas para que cada corte llegue a la\nmesa en su punto exacto. Es el oficio\nllevado a su máxima expresión.",
+            },
+            {
+              label: "foto\ncategoría",
+              categoryTitle: "El Corazón de la Cocina",
+              categoryBody:
+                "Donde la técnica se encuentra con la\ncreatividad. Nuestro equipo de cocina\ntransforma la materia prima en platos con\nidentidad. Hoy, celebramos la llegada de\nnuestras pastas caseras, elaboradas cada\ndía con manos artesanas y el compromiso de\nofrecer un sabor que se siente como en casa.",
+            },
+            {
+              label: "foto\ncategoría",
+              categoryTitle: "Embajadores de la Experiencia",
+              categoryBody:
+                "Nuestros mozos y personal de atención al\ncliente son el puente entre nuestra cocina\ny tu mesa. Con la calidez rosarina que\nnos define, se encargan de que cada\nencuentro sea fluido, cercano y\nprofesional. Son los anfitriones que hacen\nque siempre quieras volver.",
+            },
+          ].map((item, i) => (
             <div key={i} className={`pf-chef-card pf-reveal${i > 0 ? ` pf-delay-${i}` : ""}`}>
               <div className="pf-chef-placeholder">
-                <span className="pf-chef-placeholder-text pf-sans">{label}</span>
+                <span className="pf-chef-placeholder-text pf-sans">{item.label}</span>
               </div>
-              <div className="pf-chef-info">
-                <div className="pf-chef-role pf-sans">{role}</div>
-                <div className="pf-chef-name pf-serif">Nombre<br />del Chef</div>
+              <div className="pf-chef-info pf-chef-info--category">
+                <div className="pf-chef-category-title pf-serif">{item.categoryTitle}</div>
+                <p className="pf-chef-category-desc pf-cormorant">{item.categoryBody}</p>
               </div>
             </div>
           ))}
@@ -280,11 +302,13 @@ export default function HomePage() {
         <div className="pf-cta-final-content">
           <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Reservas</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">
-            Encontrá tu<br /><em>experiencia</em>
+            Elegí tu propia<br /><em>experiencia</em>
           </h2>
           <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Ya sea una cena elegante o un encuentro casual,<br />
-            tenemos el lugar perfecto para vos.
+            Dos locales, una misma pasión y equipo.<br />
+            Te invitamos a ser parte de nuestra<br />
+            historia. Elegí tu local preferido y dejanos<br />
+            el resto a nosotros.
           </p>
           <div className="pf-cta-buttons pf-reveal pf-delay-3">
             <Link href="/picado-fino" className="pf-btn-amber pf-sans">Picado Fino</Link>

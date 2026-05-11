@@ -1,16 +1,28 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { type MenuItem, type PublicBusiness, formatItemPrice, whatsappMeUrl } from "@/lib/api"
+import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 
-const WHATSAPP_URL =
+const MSG_RESERVA = "Hola quiero reservar una mesa en Picado Fino"
+const MSG_PEDIDO = "Hola quiero hacer un pedido a domicilio en Picado Fino"
+
+const FALLBACK_WHATSAPP_RESERVA =
   "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20Picado%20Fino"
 
-const WHATSAPP_PEDIDO_URL =
+const FALLBACK_WHATSAPP_PEDIDO =
   "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20a%20domicilio%20en%20Picado%20Fino"
 
-type Props = { basePath: string; otherRestaurantPath: string }
+type Props = {
+  basePath: string
+  otherRestaurantPath: string
+  featuredItems: MenuItem[]
+  business: PublicBusiness | null
+}
 
-export function PicadoFinoHome({ otherRestaurantPath }: Props) {
+export function PicadoFinoHome({ featuredItems, business }: Props) {
+  const waReserva = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_RESERVA) ?? FALLBACK_WHATSAPP_RESERVA
+  const waPedido = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_PEDIDO) ?? FALLBACK_WHATSAPP_PEDIDO
   const heroRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 
@@ -62,27 +74,27 @@ export function PicadoFinoHome({ otherRestaurantPath }: Props) {
         />
         <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(10,8,7,0.95) 0%, rgba(10,8,7,0.25) 50%, rgba(10,8,7,0.6) 100%)" }} />
         <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "780px" }}>
-          <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--pf-amber)", marginBottom: "24px", display: "block" }}>
+          <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--brand-yellow)", marginBottom: "24px", display: "block" }}>
             Fine Dining · Parrilla Premium · Rosario
           </span>
           <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(56px, 8vw, 110px)", fontWeight: 700, lineHeight: 0.9, letterSpacing: "-0.02em", color: "var(--pf-cream)", marginBottom: "12px" }}>
-            Picado<br /><em style={{ fontStyle: "italic", color: "var(--pf-amber-light)" }}>Fino</em>
+            Picado<br /><em style={{ fontStyle: "italic", color: "var(--brand-yellow)" }}>Fino</em>
           </h1>
           <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "21px", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.65, marginBottom: "44px", maxWidth: "500px" }}>
             Una experiencia gastronómica sofisticada donde el asado argentino se eleva a su máxima expresión. Cortes premium, ambiente elegante y atención personalizada.
           </p>
           <div className="pf-hero-ctas" style={{ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "center" }}>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
+            <a href={waReserva} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
               Reservar mesa
             </a>
-            <a href={WHATSAPP_PEDIDO_URL} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
+            <a href={waPedido} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
               Hacer pedido
             </a>
             <a href="#menu" className="pf-btn-ghost pf-sans">Ver menú</a>
           </div>
         </div>
         <div style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-          <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--pf-amber), transparent)" }} />
+          <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--brand-yellow), transparent)" }} />
           <span className="pf-sans" style={{ fontSize: "9px", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--pf-body-text)", writingMode: "vertical-rl", opacity: 0.4 }}>Scroll</span>
         </div>
       </section>
@@ -136,24 +148,19 @@ export function PicadoFinoHome({ otherRestaurantPath }: Props) {
           </p>
         </div>
         <div className="pf-menu-grid pf-reveal">
-          {[
-            { name: "Bife de Chorizo", desc: "Madurado 21 días, brasas de quebracho, chimichurri de la casa", price: "$-/-" },
-            { name: "Entraña Fina", desc: "Corte seleccionado, marinada 12 horas, salsa criolla fresca", price: "$-/-" },
-            { name: "Ojo de Bife", desc: "Premium angus, punto justo de brasa, sal patagónica", price: "$-/-" },
-            { name: "Tira de Asado", desc: "Cocción lenta sobre brasas, jugosa por dentro, costras perfectas", price: "$-/-" },
-            { name: "Mollejas al Disco", desc: "Tiernas y crocantes, limón, perejil, ajo", price: "$-/-" },
-            { name: "Provoleta Artesanal", desc: "Queso provolone importado, orégano fresco, brasa suave", price: "$-/-" },
-          ].map(({ name, desc, price }) => (
-            <div key={name} className="pf-menu-item">
+          {featuredItems.map((item) => (
+            <div key={item.id} className="pf-menu-item">
               <div>
-                <div className="pf-menu-item-name pf-serif">{name}</div>
-                <div className="pf-menu-item-desc pf-cormorant">{desc}</div>
+                <div className="pf-menu-item-name pf-serif">{item.name}</div>
+                <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
               </div>
-              <div className="pf-menu-item-price pf-serif">{price}</div>
+              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item.prices)}</div>
             </div>
           ))}
         </div>
       </section>
+
+      {business ? <BusinessHoursLocation business={business} /> : null}
 
       {/* ===== EXPERIENCIA ===== */}
       <section className="pf-experiencia">
@@ -205,7 +212,7 @@ export function PicadoFinoHome({ otherRestaurantPath }: Props) {
           <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Reservas</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">Reservá tu<br /><em>mesa</em></h2>
           <p className="pf-reveal pf-delay-2 pf-cormorant">Para ocasiones especiales o simplemente porque la vida merece celebrarse.</p>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
+          <a href={waReserva} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
             Hacer una reserva
           </a>
         </div>
@@ -220,7 +227,7 @@ export function PicadoFinoHome({ otherRestaurantPath }: Props) {
           <p className="pf-reveal pf-delay-2 pf-cormorant">
             Si preferís la intimidad de tu propio espacio, llevamos la parrilla con el mismo estándar de sala: cortes seleccionados, preparación impecable y el ritual Picado Fino hasta donde vos elijas recibirlo.
           </p>
-          <a href={WHATSAPP_PEDIDO_URL} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
+          <a href={waPedido} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
             Hacer pedido por WhatsApp
           </a>
         </div>
