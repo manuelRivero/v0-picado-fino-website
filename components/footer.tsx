@@ -1,8 +1,12 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function Footer() {
+  const pathname = usePathname()
+  const showReservasLink = pathname.startsWith("/picado-fino")
+
   return (
     <footer>
       <div className="footer-top">
@@ -36,7 +40,9 @@ export function Footer() {
         <div className="footer-col">
           <h4>Contacto</h4>
           <ul>
-            <li><a href="#reserva">Reservas</a></li>
+            {showReservasLink ? (
+              <li><a href="#reserva">Reservas</a></li>
+            ) : null}
             <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a></li>
           </ul>
