@@ -75,51 +75,44 @@ export type MenuItem = {
   id: string
   name: string
   description: string
+  ingredients?: string
+  preparation?: string
   image: string
   servesPeople: number
+  isFeatured?: boolean
   category: MenuItemCategory
+  price: MenuItemPrice
   prices: MenuItemPrice[]
 }
 
-export function formatItemPrice(prices: MenuItemPrice[]): string {
-  if (!prices.length) return ""
-  const p = prices[0]
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: p.currencyCode,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(parseFloat(p.amount))
+export function formatItemPrice(item: Pick<MenuItem, "price" | "prices">): string {
+  const p = item.price ?? item.prices?.[0]
+  if (!p?.amount) return ""
+
+  const amount = Number.parseFloat(p.amount)
+  if (Number.isNaN(amount)) return ""
+
+  const formattedAmount = new Intl.NumberFormat("es-AR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
+
+  return `${p.currencyCode} ${formattedAmount}`
 }
 
 export async function fetchFeaturedItems(businessId: string): Promise<MenuItem[]> {
   const baseUrl = process.env.NEXT_PUBLIC_API?.trim()
-
-  console.log("[api] fetchFeaturedItems →", { baseUrl, businessId })
-
-  if (!baseUrl || !businessId) {
-    console.warn("[api] fetchFeaturedItems: baseUrl o businessId vacío — abortando")
-    return []
-  }
+  if (!baseUrl || !businessId) return []
 
   const url = `${baseUrl}/public/businesses/${businessId}/featured-items?limit=10`
-  console.log("[api] GET", url)
 
   try {
     const res = await fetch(url, { next: { revalidate: 60 } })
-    console.log("[api] response status:", res.status, res.statusText)
+    if (!res.ok) return []
 
-    if (!res.ok) {
-      console.error("[api] respuesta no OK — devolviendo []")
-      return []
-    }
-
-    const data = await res.json()
-    console.log("[api] body completo:", JSON.stringify(data))
-    console.log("[api] items recibidos:", data.items?.length ?? 0)
+    const data = (await res.json()) as { items?: MenuItem[] }
     return Array.isArray(data.items) ? data.items : []
-  } catch (err) {
-    console.error("[api] fetch falló con error:", err)
+  } catch {
     return []
   }
 }

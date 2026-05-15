@@ -157,7 +157,7 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
                 <div className="le-menu-row-name pf-serif">{item.name}</div>
                 <div className="le-menu-row-desc pf-cormorant">{item.description}</div>
               </div>
-              <div className="le-menu-row-price pf-serif">{formatItemPrice(item.prices)}</div>
+              <div className="le-menu-row-price pf-serif">{formatItemPrice(item)}</div>
             </div>
           ))}
         </div>

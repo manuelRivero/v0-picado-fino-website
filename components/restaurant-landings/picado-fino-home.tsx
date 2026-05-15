@@ -154,7 +154,7 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
                 <div className="pf-menu-item-name pf-serif">{item.name}</div>
                 <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
               </div>
-              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item.prices)}</div>
+              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item)}</div>
             </div>
           ))}
         </div>
