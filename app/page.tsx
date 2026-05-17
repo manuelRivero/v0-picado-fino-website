@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
+import image1 from "@/public/images/1.jpg"
+import image2 from "@/public/images/2.jpg"
+import image3 from "@/public/images/3.jpg"
 
 const marqueeItems = [
   "Hay equipo",
@@ -62,7 +65,7 @@ export default function HomePage() {
           style={{
             position: "absolute",
             inset: "-10%",
-            backgroundImage: "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1800&q=80')",
+            backgroundImage: `url(${image1.src})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             willChange: "transform",
@@ -140,11 +143,10 @@ export default function HomePage() {
         <div className="pf-rest-panel">
           <div
             className="pf-rest-panel-bg"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600891964092-4316c288032e?w=1200&q=80')" }}
+            style={{ backgroundImage: `url(${image2.src})` }}
           />
           <div className="pf-rest-panel-overlay" />
           <div className="pf-rest-panel-content">
-            <span className="pf-rest-tag pf-sans">Fine Dining · Parrilla Premium</span>
             <h2 className="pf-rest-name pf-serif">Picado<br />Fino</h2>
             <p className="pf-rest-desc pf-cormorant">
               Una experiencia gastronómica sofisticada donde el asado argentino se eleva a su máxima expresión. Para ocasiones que merecen lo mejor.
@@ -161,14 +163,13 @@ export default function HomePage() {
         <div className="pf-rest-panel">
           <div
             className="pf-rest-panel-bg"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80')" }}
+            style={{ backgroundImage: `url(${image3.src})` }}
           />
           <div className="pf-rest-panel-overlay" />
           <div className="pf-rest-panel-content">
-            <span className="pf-rest-tag pf-sans">Casual · Rápido · Accesible</span>
             <h2 className="pf-rest-name pf-serif">La Esquina<br />de Picado</h2>
             <p className="pf-rest-desc pf-cormorant">
-              La misma calidad y pasión en un formato más relajado. Ideal para un almuerzo rápido o una salida con amigos sin formalismos.
+Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y  cocina al paso en el corazón de Rosario.
             </p>
             <Link href="/la-esquina" className="pf-rest-cta pf-sans">
               Ver restaurante

@@ -176,7 +176,6 @@ nav.scrolled {
   padding: 18px 52px; border-bottom: 1px solid rgba(245,240,232,0.06);
 }
 .nav-logo { font-family: var(--font-serif); font-weight: 700; font-size: 18px; letter-spacing: 0.18em; color: var(--cream); text-decoration: none; text-transform: uppercase; }
-nav.nav-restaurant .nav-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; }
 .nav-links { display: flex; gap: 40px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { font-family: var(--font-sans); font-size: 11px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-dim); text-decoration: none; opacity: 0.7; transition: opacity 0.3s; position: relative; }
 .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--amber); transition: width 0.3s ease; }
@@ -194,7 +193,7 @@ nav.nav-restaurant .nav-logo { position: absolute; left: 50%; top: 50%; transfor
    FOOTER — verbatim from design
    ============================================================ */
 footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgba(245,240,232,0.06); }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 80px; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 80px; }
 .footer-brand .logo { font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--cream); text-transform: uppercase; margin-bottom: 20px; display: block; text-decoration: none; }
 .footer-brand p { font-family: var(--font-cormorant); font-size: 16px; font-style: italic; color: var(--text-body); line-height: 1.7; max-width: 380px; opacity: 0.7; }
 .footer-col h4 { font-family: var(--font-sans); font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--amber); margin-bottom: 24px; }
@@ -696,11 +695,13 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 }
 .pf-feature-row {
   background: var(--pf-carbon); padding: 22px 28px;
-  display: flex; align-items: center; gap: 20px; transition: background 0.3s;
+  display: flex; align-items: flex-start; gap: 20px; transition: background 0.3s;
 }
 .pf-feature-row:hover { background: var(--pf-carbon-light); }
-.pf-feature-num { font-size: 12px; font-style: italic; color: var(--pf-amber); opacity: 0.6; min-width: 28px; }
+.pf-feature-num { font-size: 12px; font-style: italic; color: var(--pf-amber); opacity: 0.6; min-width: 28px; padding-top: 2px; }
+.pf-feature-content { display: flex; flex-direction: column; gap: 8px; }
 .pf-feature-name { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--pf-cream); }
+.pf-feature-desc { font-size: 16px; font-weight: 300; font-style: italic; color: var(--pf-body-text); line-height: 1.6; margin: 0; }
 .pf-identidad-image { position: relative; }
 .pf-identidad-image img {
   width: 100%; aspect-ratio: 4/5; object-fit: cover;
@@ -755,13 +756,68 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 .pf-experiencia h2 {
   font-size: clamp(42px, 5vw, 68px); font-weight: 700;
   line-height: 1.05; letter-spacing: -0.02em; color: var(--pf-cream);
-  margin-bottom: 80px; max-width: 700px;
+  margin-bottom: 28px; max-width: 700px;
 }
 .pf-experiencia h2 em { font-style: italic; color: var(--pf-amber-light); }
-.pf-exp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+.pf-experiencia-intro {
+  font-size: 20px; font-weight: 300; font-style: italic;
+  color: var(--pf-body-text); line-height: 1.75;
+  max-width: 560px; margin-bottom: 56px;
+}
+.pf-exp-carousel { width: 100%; }
+.pf-exp-carousel-inner { width: 100%; }
+.pf-exp-carousel-track { margin-left: -20px; }
+.pf-exp-carousel-slide {
+  padding-left: 20px;
+  flex: 0 0 88%;
+  min-width: 0;
+}
+.pf-exp-card {
+  height: 100%;
+  padding: 36px 32px 40px;
+  background: var(--pf-carbon-mid);
+  border: 1px solid rgba(245,240,232,0.08);
+  transition: border-color 0.3s, background 0.3s;
+}
+.pf-exp-card:hover {
+  background: var(--pf-carbon-light);
+  border-color: rgba(245,240,232,0.14);
+}
 .pf-exp-divider { width: 32px; height: 1px; background: var(--pf-amber); margin-bottom: 28px; opacity: 0.5; }
 .pf-exp-title { font-size: 24px; font-weight: 600; color: var(--pf-cream); margin-bottom: 16px; }
-.pf-exp-text { font-size: 18px; font-style: italic; color: var(--pf-body-text); line-height: 1.7; }
+.pf-exp-text { font-size: 18px; font-style: italic; color: var(--pf-body-text); line-height: 1.7; margin: 0; }
+.pf-exp-carousel-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 24px; margin-top: 40px;
+}
+.pf-exp-carousel-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  border: 1px solid rgba(245,240,232,0.15);
+  background: transparent; color: var(--pf-cream);
+  cursor: pointer; transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+.pf-exp-carousel-btn:hover {
+  border-color: var(--pf-amber);
+  color: var(--pf-amber);
+  background: rgba(245,240,232,0.04);
+}
+.pf-exp-carousel-dots { display: flex; align-items: center; gap: 10px; }
+.pf-exp-carousel-dot {
+  width: 8px; height: 8px; padding: 0; border: none; border-radius: 50%;
+  background: rgba(245,240,232,0.2); cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.pf-exp-carousel-dot.is-active {
+  background: var(--pf-amber);
+  transform: scale(1.15);
+}
+@media (min-width: 768px) {
+  .pf-exp-carousel-slide { flex: 0 0 50%; }
+}
+@media (min-width: 1024px) {
+  .pf-exp-carousel-slide { flex: 0 0 33.333%; }
+}
 
 /* --- Galería editorial grid --- */
 .pf-galeria-grid {
@@ -801,7 +857,19 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 }
 .pf-reserva-cta-bg {
   position: absolute; inset: 0;
-  background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=70') center/cover no-repeat;
+  overflow: hidden;
+}
+.pf-reserva-cta-bg-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  object-position: center;
   filter: brightness(0.12) saturate(0.4);
 }
 .pf-reserva-cta-content { position: relative; z-index: 1; }
@@ -858,21 +926,82 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 .le-stat-big span { color: var(--pf-amber); font-style: italic; }
 .le-stat-desc { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pf-body-text); opacity: 0.5; }
 
+/* La Esquina — experiencia editorial */
+.le-experiencia {
+  padding: 140px 52px;
+  border-top: 1px solid rgba(245,240,232,0.06);
+  background: var(--pf-carbon);
+}
+
 /* Menu casual (La Esquina horizontal list) */
 .le-menu-casual {
   padding: 140px 52px;
   border-top: 1px solid rgba(245,240,232,0.06);
   background: var(--pf-carbon-mid);
 }
-.le-menu-header {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 80px; align-items: end;
+.le-landing-menu-section .le-menu-intro--compact {
+  margin-bottom: 48px;
 }
-.le-menu-header h2 {
+.le-landing-menu-section .le-menu-intro--compact h2 em {
+  font-style: italic;
+  color: var(--pf-amber-light);
+}
+.le-landing-menu { margin-top: 0; }
+.le-landing-menu-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.le-landing-menu-tab {
+  padding: 10px 18px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pf-body-text);
+  background: transparent;
+  border: 1px solid rgba(245,240,232,0.12);
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+.le-landing-menu-tab:hover,
+.le-landing-menu-tab-active {
+  border-color: var(--pf-amber);
+  color: var(--pf-amber);
+  background: rgba(201, 169, 98, 0.08);
+}
+.le-landing-menu-footer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+.le-landing-menu-empty {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.le-landing-menu-empty p {
+  font-size: 20px;
+  font-style: italic;
+  color: var(--pf-body-text);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+.le-menu-intro {
+  max-width: 760px;
+  margin-bottom: 80px;
+}
+.le-menu-intro h2 {
   font-size: clamp(40px, 5vw, 68px); font-weight: 700;
   line-height: 1.05; letter-spacing: -0.02em; color: var(--pf-cream);
+  margin-bottom: 32px;
 }
-.le-menu-header h2 em { font-style: italic; color: var(--pf-amber-light); }
-.le-menu-header p { font-size: 19px; font-style: italic; color: var(--pf-body-text); line-height: 1.7; align-self: end; }
+.le-menu-intro h2 em { font-style: italic; color: var(--pf-amber-light); }
+.le-menu-intro p {
+  font-size: 20px; font-weight: 300; font-style: italic;
+  color: var(--pf-body-text); line-height: 1.75; margin-bottom: 0;
+}
+.le-menu-list { margin-top: 0; }
 .le-menu-list { display: flex; flex-direction: column; gap: 1px; background: rgba(245,240,232,0.06); }
 .le-menu-row {
   background: var(--pf-carbon-mid); padding: 28px 40px;
@@ -996,7 +1125,6 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 
   /* Páginas internas — Experiencia: 3 → 2 columnas */
   .pf-experiencia { padding: 100px 32px; }
-  .pf-exp-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
 
   /* Páginas internas — Galería: simplificar a 2 cols */
   .pf-galeria-grid {
@@ -1014,8 +1142,9 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   .le-propuesta-stat { padding: 28px 32px; }
 
   /* La Esquina — Menú casual */
+  .le-experiencia { padding: 100px 32px; }
   .le-menu-casual { padding: 100px 32px; }
-  .le-menu-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 52px; }
+  .le-menu-intro { margin-bottom: 52px; }
 
   /* La Esquina — Ambiente */
   .le-ambiente-intro { padding: 80px 32px 60px; }
@@ -1045,9 +1174,6 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   /* Nav — restaurante */
   .nav-reserve { padding: 8px 14px; font-size: 9px; letter-spacing: 0.16em; }
   .nav-restaurant-ctas { gap: 6px; }
-  .nav-back span { display: none !important; }
-  nav.nav-restaurant .nav-logo { display: none !important; }
-
   /* Footer */
   footer { padding: 52px 20px 28px; }
   .footer-top { grid-template-columns: 1fr; gap: 36px; margin-bottom: 44px; }
@@ -1114,8 +1240,8 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 
   /* Páginas internas — Experiencia: → 1 col */
   .pf-experiencia { padding: 80px 20px; }
-  .pf-exp-grid { grid-template-columns: 1fr; gap: 36px; }
-  .pf-experiencia h2 { margin-bottom: 44px; }
+  .pf-experiencia h2 { margin-bottom: 24px; }
+  .pf-experiencia-intro { margin-bottom: 40px; }
 
   /* Páginas internas — Galería: → 1 col */
   .pf-galeria-grid {
@@ -1136,8 +1262,9 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   .le-propuesta-stat { padding: 24px 24px; }
 
   /* La Esquina — Menú casual */
+  .le-experiencia { padding: 80px 20px; }
   .le-menu-casual { padding: 80px 20px; }
-  .le-menu-header { grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
+  .le-menu-intro { margin-bottom: 40px; }
   .le-menu-row {
     display: flex; flex-direction: column;
     gap: 6px; padding: 20px 20px;
@@ -1184,6 +1311,7 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   .pf-delivery-cta { padding: 80px 16px; }
   .pf-identidad { padding: 64px 16px; }
   .le-propuesta { padding: 64px 16px; }
+  .le-experiencia { padding: 64px 16px; }
   .le-menu-casual { padding: 64px 16px; }
   .le-ambiente-intro { padding: 48px 16px 36px; }
   .le-cta-cruce-left { padding: 48px 16px; }

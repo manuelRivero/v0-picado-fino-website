@@ -100,14 +100,12 @@ export function formatItemPrice(item: Pick<MenuItem, "price" | "prices">): strin
   return `${p.currencyCode} ${formattedAmount}`
 }
 
-export async function fetchFeaturedItems(businessId: string): Promise<MenuItem[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_API?.trim()
-  if (!baseUrl || !businessId) return []
-
-  const url = `${baseUrl}/public/businesses/${businessId}/featured-items?limit=10`
-
+async function fetchMenuItemsFromPath(
+  baseUrl: string,
+  path: string
+): Promise<MenuItem[]> {
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } })
+    const res = await fetch(`${baseUrl}${path}`, { next: { revalidate: 60 } })
     if (!res.ok) return []
 
     const data = (await res.json()) as { items?: MenuItem[] }
@@ -115,6 +113,36 @@ export async function fetchFeaturedItems(businessId: string): Promise<MenuItem[]
   } catch {
     return []
   }
+}
+
+export async function fetchFeaturedItems(businessId: string): Promise<MenuItem[]> {
+  const baseUrl = process.env.NEXT_PUBLIC_API?.trim()
+  if (!baseUrl || !businessId) return []
+
+  return fetchMenuItemsFromPath(
+    baseUrl,
+    `/public/businesses/${businessId}/featured-items?limit=10`
+  )
+}
+
+/** Carta completa publicada en el backend (categorías + ítems con precio). */
+export async function fetchMenuItems(
+  businessId: string,
+  limit = 100
+): Promise<MenuItem[]> {
+  const baseUrl = process.env.NEXT_PUBLIC_API?.trim()
+  if (!baseUrl || !businessId) return []
+
+  const menuItems = await fetchMenuItemsFromPath(
+    baseUrl,
+    `/public/businesses/${businessId}/menu-items?limit=${limit}`
+  )
+  if (menuItems.length > 0) return menuItems
+
+  return fetchMenuItemsFromPath(
+    baseUrl,
+    `/public/businesses/${businessId}/featured-items?limit=${limit}`
+  )
 }
 
 export async function fetchBusiness(businessId: string): Promise<PublicBusiness | null> {

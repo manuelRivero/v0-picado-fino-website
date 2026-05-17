@@ -3,6 +3,12 @@
 import { useEffect, useRef } from "react"
 import { type MenuItem, type PublicBusiness, formatItemPrice, whatsappMeUrl } from "@/lib/api"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
+import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
+import image1 from "@/public/images/FOTO-01.jpg"
+import image2 from "@/public/images/FOTO-02.jpg"
+import image3 from "@/public/images/FOTO-03.jpg"
+import image4 from "@/public/images/FOTO-04.jpg"
+import image5 from "@/public/images/FOTO-05.jpg"
 
 const MSG_RESERVA = "Hola quiero reservar una mesa en Picado Fino"
 const MSG_PEDIDO = "Hola quiero hacer un pedido a domicilio en Picado Fino"
@@ -68,14 +74,15 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
           ref={parallaxRef}
           style={{
             position: "absolute", inset: "-10%",
-            backgroundImage: "url('https://images.unsplash.com/photo-1600891964092-4316c288032e?w=1800&q=85')",
+            backgroundImage: `url(${image1.src})`,
             backgroundSize: "cover", backgroundPosition: "center", willChange: "transform",
           }}
         />
         <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(10,8,7,0.95) 0%, rgba(10,8,7,0.25) 50%, rgba(10,8,7,0.6) 100%)" }} />
         <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "780px" }}>
           <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--brand-yellow)", marginBottom: "24px", display: "block" }}>
-            Fine Dining · Parrilla Premium · Rosario
+          Estacionamiento gratuito - Espacio para
+          chicos - Atención familiar
           </span>
           <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(56px, 8vw, 110px)", fontWeight: 700, lineHeight: 0.9, letterSpacing: "-0.02em", color: "var(--pf-cream)", marginBottom: "12px" }}>
             Picado<br /><em style={{ fontStyle: "italic", color: "var(--brand-yellow)" }}>Fino</em>
@@ -90,7 +97,7 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
             <a href={waPedido} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
               Hacer pedido
             </a>
-            <a href="#menu" className="pf-btn-ghost pf-sans">Ver menú</a>
+            <a href="#menu" className="pf-btn-primary pf-sans">Ver menú</a>
           </div>
         </div>
         <div style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
@@ -104,29 +111,32 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
         <div className="pf-identidad-text">
           <div className="pf-section-label pf-sans pf-reveal">La experiencia</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">
-            El asado argentino<br />en su máxima<br /><em>expresión</em>
+            El ritual del<br /><em>compartir</em>
           </h2>
           <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Cada visita a Picado Fino es un ritual. Desde la selección de los cortes hasta el último ember del quebracho, cada detalle está pensado para crear un momento que perdura.
+            En cada plato servimos una historia. Desde el fuego que no descansa hasta la harina que amasamos cada mañana, seleccionamos ingredientes reales para crear momentos extraordinarios. Te invitamos a conocer un camino de sabores diseñado para gratificar todos tus sentidos.
           </p>
           <div className="pf-identidad-features pf-reveal pf-delay-3">
             {[
-              ["01", "Cortes Premium Seleccionados"],
-              ["02", "Brasas de Quebracho Colorado"],
-              ["03", "Carta de Vinos Curada"],
-              ["04", "Atención Personalizada"],
-              ["05", "Ambiente de Diseño"],
-            ].map(([num, name]) => (
+              ["01", "Bebidas & Entradas", "El brindis ideal con etiquetas emblemáticas y nuestras entradas más clásicas."],
+              ["02", "Parrilla", "Cortes seleccionados y fuego lento para honrar la tradición del asado."],
+              ["03", "Pastas Caseras", "Orgullo artesanal: amasadas a mano cada mañana con dedicación diaria."],
+              ["04", "Pizzanesas", "Sabor y abundancia para compartir, con el toque único de nuestra cocina."],
+              ["05", "Postres, el final", "El broche de oro dulce para que tu visita sea inolvidable."],
+            ].map(([num, name, desc]) => (
               <div key={num} className="pf-feature-row">
                 <span className="pf-feature-num pf-serif">{num}</span>
-                <span className="pf-feature-name pf-sans">{name}</span>
+                <div className="pf-feature-content">
+                  <span className="pf-feature-name pf-sans">{name}</span>
+                  {desc ? <p className="pf-feature-desc pf-cormorant">{desc}</p> : null}
+                </div>
               </div>
             ))}
           </div>
         </div>
         <div className="pf-identidad-image pf-reveal pf-delay-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.unsplash.com/photo-1558030006-450675393462?w=900&q=85" alt="Cortes premium Picado Fino" />
+          <img src={image2.src} alt="Cortes premium Picado Fino" />
           <div className="pf-identidad-caption">
             <span className="pf-sans">Especialidad</span>
             <strong className="pf-serif">Bife de Chorizo</strong>
@@ -165,19 +175,14 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
       {/* ===== EXPERIENCIA ===== */}
       <section className="pf-experiencia">
         <div className="pf-section-label pf-sans pf-reveal">Lo que ofrecemos</div>
-        <h2 className="pf-reveal pf-delay-1 pf-serif">Una noche que<br />no olvidarás</h2>
-        <div className="pf-exp-grid">
-          {[
-            { title: "Sommelier en Sala", text: "Nuestra carta de vinos es cuidadosamente curada. Te acompañamos en cada elección para encontrar el maridaje perfecto." },
-            { title: "Parrilla a la Vista", text: "El fuego es parte del espectáculo. Desde tu mesa podés ver cómo trabajan nuestros maestros parrilleros sobre las brasas." },
-            { title: "Eventos Privados", text: "Salones privados para reuniones de negocios, celebraciones especiales y experiencias a medida para grupos." },
-          ].map(({ title, text }, i) => (
-            <div key={title} className={`pf-reveal${i > 0 ? ` pf-delay-${i}` : ""}`}>
-              <div className="pf-exp-divider" />
-              <div className="pf-exp-title pf-serif">{title}</div>
-              <p className="pf-exp-text pf-cormorant">{text}</p>
-            </div>
-          ))}
+        <h2 className="pf-reveal pf-delay-1 pf-serif">
+          Pensado para tu<br /><em>Comodidad</em>
+        </h2>
+        <p className="pf-experiencia-intro pf-cormorant pf-reveal pf-delay-2">
+          En Picado Fino, los detalles hacen la diferencia. Queremos que tu única preocupación sea disfrutar del momento.
+        </p>
+        <div className="pf-reveal pf-delay-3">
+          <PicadoFinoOffersCarousel />
         </div>
       </section>
 
@@ -207,11 +212,16 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
 
       {/* ===== RESERVA CTA ===== */}
       <section className="pf-reserva-cta" id="reserva">
-        <div className="pf-reserva-cta-bg" />
+        <div className="pf-reserva-cta-bg" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={image3.src} alt="" className="pf-reserva-cta-bg-img" style={{ width: "100%" }} />
+        </div>
         <div className="pf-reserva-cta-content">
           <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Reservas</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">Reservá tu<br /><em>mesa</em></h2>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">Para ocasiones especiales o simplemente porque la vida merece celebrarse.</p>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">Tu lugar en nuestra<br /><em>mesa</em></h2>
+          <p className="pf-reveal pf-delay-2 pf-cormorant">
+            Nos encanta recibirte. Asegurá tu espacio y dejanos preparar todo para que tu única tarea sea disfrutar.
+          </p>
           <a href={waReserva} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
             Hacer una reserva
           </a>
@@ -223,7 +233,7 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
         <div className="pf-delivery-cta-bg" />
         <div className="pf-delivery-cta-content">
           <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>A domicilio</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">El mismo ritual,<br /><em>en tu hogar</em></h2>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">Picadofino en tu<br /><em>casa</em></h2>
           <p className="pf-reveal pf-delay-2 pf-cormorant">
             Si preferís la intimidad de tu propio espacio, llevamos la parrilla con el mismo estándar de sala: cortes seleccionados, preparación impecable y el ritual Picado Fino hasta donde vos elijas recibirlo.
           </p>

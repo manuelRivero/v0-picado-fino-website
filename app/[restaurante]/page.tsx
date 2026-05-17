@@ -9,7 +9,7 @@ import {
   RESTAURANT_SLUGS,
   type RestaurantSlug,
 } from "@/lib/restaurants"
-import { fetchBusiness, fetchFeaturedItems } from "@/lib/api"
+import { fetchBusiness, fetchFeaturedItems, fetchMenuItems } from "@/lib/api"
 
 export const revalidate = 60
 
@@ -18,6 +18,7 @@ const PAGE_META_FALLBACK: Record<
   { title: string; description: string }
 > = {
   "picado-fino": {
+    
     title: "Picado Fino",
     description:
       "Una experiencia gastronómica sofisticada donde el asado argentino se eleva a su máxima expresión. Cortes premium, ambiente elegante y atención personalizada.",
@@ -89,8 +90,9 @@ export default async function RestaurantePage({
       ? process.env.NEXT_PUBLIC_PICADO_ID?.trim()
       : process.env.NEXT_PUBLIC_LA_ESQUINA_ID?.trim()
 
-  const [featuredItems, business] = await Promise.all([
+  const [featuredItems, menuItems, business] = await Promise.all([
     fetchFeaturedItems(businessId ?? ""),
+    fetchMenuItems(businessId ?? ""),
     fetchBusiness(businessId ?? ""),
   ])
 
@@ -109,7 +111,7 @@ export default async function RestaurantePage({
     <LaEsquinaHome
       basePath={basePath}
       otherRestaurantPath={otherPath}
-      featuredItems={featuredItems}
+      menuItems={menuItems}
       business={business}
     />
   )

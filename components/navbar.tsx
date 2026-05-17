@@ -17,8 +17,9 @@ const restaurants = [
   {
     href: "/la-esquina",
     navLabel: "La Esquina de Picado",
-    whatsapp: "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20en%20La%20Esquina",
-    cta: "Ir a WhatsApp",
+    whatsappPedido:
+      "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20a%20domicilio%20en%20La%20Esquina",
+    ctaPedido: "Hacer pedido",
   },
 ]
 
@@ -54,19 +55,18 @@ export function Navbar() {
           <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
             <path d="M18 6H2M2 6L7 1M2 6L7 11" stroke="currentColor" strokeWidth="1.2"/>
           </svg>
-          <span>Picadofino</span>
+          <span>Inicio</span>
         </Link>
-        <span className="nav-logo">{currentRestaurant.navLabel}</span>
         {"whatsappPedido" in currentRestaurant && currentRestaurant.whatsappPedido ? (
           <div className="nav-restaurant-ctas">
-            <a
+            {currentRestaurant.whatsapp && <a
               href={currentRestaurant.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="nav-reserve"
             >
               {currentRestaurant.cta}
-            </a>
+            </a>}
             <a
               href={currentRestaurant.whatsappPedido}
               target="_blank"

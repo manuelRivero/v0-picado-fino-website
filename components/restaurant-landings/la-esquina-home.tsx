@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { type MenuItem, type PublicBusiness, formatItemPrice, whatsappMeUrl } from "@/lib/api"
+import { type MenuItem, type PublicBusiness, whatsappMeUrl } from "@/lib/api"
+import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
+import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 
 const MSG_WHATSAPP = "Hola quiero hacer un pedido en La Esquina de Picado"
 const MSG_PEDIDO =
@@ -18,11 +20,11 @@ const FALLBACK_PEDIDO =
 type Props = {
   basePath: string
   otherRestaurantPath: string
-  featuredItems: MenuItem[]
+  menuItems: MenuItem[]
   business: PublicBusiness | null
 }
 
-export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: Props) {
+export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, business }: Props) {
   const waGeneral = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_WHATSAPP) ?? FALLBACK_WHATSAPP
   const waPedido = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_PEDIDO) ?? FALLBACK_PEDIDO
   const heroRef = useRef<HTMLElement>(null)
@@ -77,22 +79,19 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
         <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(12,10,8,0.95) 0%, rgba(12,10,8,0.2) 85%, rgba(12,10,8,0.55) 100%)" }} />
         <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "780px" }}>
           <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--brand-yellow)", marginBottom: "24px", display: "block" }}>
-            Casual · Rápido · Accesible · Rosario
+          Delivery – Take away – clasicos al
+          paso - cafeteria
           </span>
           <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(52px, 7.5vw, 106px)", fontWeight: 700, lineHeight: 0.92, letterSpacing: "-0.02em", color: "var(--pf-cream)", marginBottom: "12px" }}>
             La Esquina<br />de <em style={{ fontStyle: "italic", color: "var(--brand-yellow)" }}>Picado</em>
           </h1>
-          <p className="pf-hero-subtitle-dim pf-serif" style={{ fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 400, fontStyle: "italic", color: "var(--pf-cream)", lineHeight: 1, marginBottom: "36px" }}>
-            Sin formalismos.
-          </p>
           <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "20px", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.65, marginBottom: "44px", maxWidth: "500px" }}>
-            La misma calidad y pasión de Picado Fino en un formato más relajado. Ideal para un almuerzo, una salida con amigos o cuando querés el mejor asado sin ceremonias.
-          </p>
+Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y  cocina al paso en el corazón de Rosario.           </p>
           <div className="pf-hero-ctas" style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans" style={{ color: "var(--pf-cream)" }}>
-              Ir a WhatsApp
+            <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
+              Hacer pedido
             </a>
-            <a href="#menu" className="pf-btn-ghost pf-sans">Ver carta</a>
+            <a href="#menu" className="pf-btn-primary pf-sans">Ver menú</a>
           </div>
         </div>
         <div style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
@@ -106,16 +105,13 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
         <div className="le-propuesta-text">
           <div className="pf-section-label pf-sans pf-reveal">Quiénes somos</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">
-            La misma pasión,<br />sin los<br /><em>formalismos</em>
+            Mismo equipo, misma pasión,<br />pero al ritmo de la ciudad.
           </h2>
           <p className="pf-reveal pf-delay-2 pf-cormorant">
-            La Esquina de Picado nació para que la experiencia de una buena parrilla no sea solo para ocasiones especiales. Aquí el fuego y la calidad son protagonistas todos los días.
-          </p>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Compartimos el mismo ADN que Picado Fino: cortes seleccionados, brasas de quebracho y cero atajos. Solo que en un formato más tuyo, más de todos los días.
+            Llevamos los grandes clásicos de Picado al formato rotisería: sándwiches calientes que son un fuego, pizzas con mucha muzzarella y minutas al paso hechas con ingredientes reales. Diseñamos una propuesta potente de Delivery y Take Away para que el sabor extraordinario te acompañe donde vayas.
           </p>
           <div className="le-prop-tags pf-reveal pf-delay-3">
-            {["Rápido", "Accesible", "Sin Reserva", "Carry Out", "Mediodía", "Para Llevar"].map(tag => (
+            {["Delivery Propio", "Delivery por Apps", "Take Away", "Espacio en el Local"].map(tag => (
               <span key={tag} className="le-prop-tag pf-sans">{tag}</span>
             ))}
           </div>
@@ -134,33 +130,45 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
         </div>
       </section>
 
-      {/* ===== MENU CASUAL ===== */}
-      <section className="le-menu-casual" id="menu">
-        <div className="le-menu-header">
-          <div>
-            <div className="pf-section-label pf-sans pf-reveal">La carta</div>
-            <h2 className="pf-reveal pf-delay-1 pf-serif">
-              Directo al<br />punto,<br /><em>sin vueltas</em>
-            </h2>
+      {/* ===== LA EXPERIENCIA (contenido editorial fijo) ===== */}
+      <section className="le-experiencia" id="experiencia">
+        <div className="le-menu-intro">
+          <div className="pf-section-label pf-sans pf-reveal">La experiencia</div>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">
+            Sabor Urbano,<br />Placer a lo Grande
+          </h2>
+          <p className="pf-reveal pf-delay-2 pf-cormorant">
+            Mismo equipo, misma pasión, pero al ritmo de la ciudad. En La Esquina cocinamos pensando en grande y para compartir. Te presentamos a los verdaderos pesos pesados de nuestra carta, diseñados para devorar solos o en compañía.
+          </p>
+          <div className="pf-identidad-features pf-reveal pf-delay-3">
+            {LA_ESQUINA_EXPERIENCE_ITEMS.map(([num, name, desc]) => (
+              <div key={num} className="pf-feature-row">
+                <span className="pf-feature-num pf-serif">{num}</span>
+                <div className="pf-feature-content">
+                  <span className="pf-feature-name pf-sans">{name}</span>
+                  <p className="pf-feature-desc pf-cormorant">{desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <p className="pf-cormorant pf-reveal pf-delay-2" style={{ fontSize: "19px", fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.7, alignSelf: "end" }}>
-            Todo lo que necesitás de una buena parrilla sin complicaciones. Menú del día, combos y clásicos que siempre están.
+        </div>
+      </section>
+
+      <section className="le-menu-casual le-landing-menu-section" id="menu">
+        <div className="le-menu-intro le-menu-intro--compact">
+          <div className="pf-section-label pf-sans pf-reveal">Menú</div>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">
+            Nuestra carta<br /><em>al día</em>
+          </h2>
+          <p className="pf-reveal pf-delay-2 pf-cormorant">
+            Precios y platos actualizados desde nuestro sistema. Elegí una categoría y armá tu pedido.
           </p>
         </div>
-        <div className="le-menu-list pf-reveal">
-          {featuredItems.map((item, i) => (
-            <div key={item.id} className="le-menu-row">
-              <span className="le-menu-row-num pf-serif">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <div className="le-menu-row-name pf-serif">{item.name}</div>
-                <div className="le-menu-row-desc pf-cormorant">{item.description}</div>
-              </div>
-              <div className="le-menu-row-price pf-serif">{formatItemPrice(item)}</div>
-            </div>
-          ))}
-        </div>
+        <LandingMenuSection
+          items={menuItems}
+          menuPageHref={`${basePath}/menu`}
+          variant="list"
+        />
       </section>
 
       {business ? <BusinessHoursLocation business={business} /> : null}
@@ -204,10 +212,10 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
       <section className="pf-delivery-cta" id="pedido">
         <div className="pf-delivery-cta-bg" />
         <div className="pf-delivery-cta-content">
-          <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>A domicilio</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">Pedí y listo,<br /><em>nosotros te lo acercamos</em></h2>
+          <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Take away</div>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">¿Con hambre?<br />Pedir es así de fácil</h2>
           <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Cuando no podés pasar por el mostrador, igual comés bien: mandanos un WhatsApp, armamos tu pedido al toque — para llevar o a domicilio — con el mismo fuego de siempre, sin protocolos ni vueltas.
+            Elegí el canal que te quede más cómodo y nosotros nos encargamos del resto. Tu plato favorito está a solo un clic.
           </p>
           <a href={waPedido} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
             Hacer pedido por WhatsApp
