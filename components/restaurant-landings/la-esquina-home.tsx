@@ -2,27 +2,14 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { type MenuItem, type PublicBusiness, whatsappMeUrl } from "@/lib/api"
+import { type MenuItem, type PublicBusiness } from "@/lib/api"
+import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import image1 from "@/public/images/01-esquina.jpg"
 import image2 from "@/public/images/02-esquina.jpg"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
-
-const MSG_RESERVA = "Hola quiero reservar una mesa en La Esquina de Picado"
-const MSG_WHATSAPP = "Hola quiero hacer un pedido en La Esquina de Picado"
-const MSG_PEDIDO =
-  "Hola quiero un pedido para llevar o a domicilio en La Esquina de Picado"
-
-const FALLBACK_WHATSAPP_RESERVA =
-  "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20La%20Esquina%20de%20Picado"
-
-const FALLBACK_WHATSAPP =
-  "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20en%20La%20Esquina"
-
-const FALLBACK_PEDIDO =
-  "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20un%20pedido%20para%20llevar%20o%20a%20domicilio%20en%20La%20Esquina"
 
 type Props = {
   basePath: string
@@ -32,9 +19,10 @@ type Props = {
 }
 
 export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, business }: Props) {
-  const waReserva = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_RESERVA) ?? FALLBACK_WHATSAPP_RESERVA
-  const waGeneral = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_WHATSAPP) ?? FALLBACK_WHATSAPP
-  const waPedido = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_PEDIDO) ?? FALLBACK_PEDIDO
+  const links = getRestaurantWhatsappLinks("la-esquina", business?.whatsappPhoneNumber)
+  const waReserva = links.reserva
+  const waGeneral = links.general
+  const waPedido = links.pedidoLlevar
   const heroRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 

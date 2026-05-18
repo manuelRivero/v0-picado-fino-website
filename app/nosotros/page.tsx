@@ -1,8 +1,9 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { MessageCircle, Flame, Users, Handshake, Star } from "lucide-react"
-
-const WHATSAPP_URL = "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa"
+import { fetchBusiness } from "@/lib/api"
+import { businessIdForSlug } from "@/lib/restaurants"
+import { restaurantWhatsappMeUrl, WHATSAPP_MESSAGES } from "@/lib/whatsapp"
 
 const values = [
   {
@@ -31,7 +32,14 @@ const values = [
   },
 ]
 
-export default function NosotrosPage() {
+export default async function NosotrosPage() {
+  const business = await fetchBusiness(businessIdForSlug("picado-fino"))
+  const whatsappUrl = restaurantWhatsappMeUrl(
+    "picado-fino",
+    business?.whatsappPhoneNumber,
+    WHATSAPP_MESSAGES["picado-fino"].reserva
+  )
+
   return (
     <div className="min-h-screen pt-24 pb-16 bg-background">
       {/* Hero */}
@@ -174,12 +182,14 @@ export default function NosotrosPage() {
                 Ya sea una cena íntima, una celebración familiar o una reunión de negocios, adaptamos cada detalle para que tu momento sea único e inolvidable.
               </p>
             </div>
-            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Reservar Experiencia
-              </a>
-            </Button>
+            {whatsappUrl ? (
+              <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Reservar Experiencia
+                </a>
+              </Button>
+            ) : null}
           </div>
           <div className="relative aspect-[4/5] rounded-lg overflow-hidden">
             <Image

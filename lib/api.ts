@@ -19,7 +19,8 @@ export type PublicBusiness = {
   slug: string
   timezone: string
   currencyCode: string
-  whatsappPhoneNumber: string
+  whatsappPhoneNumber?: string | null
+  streetAddress?: string
   location: BusinessLocation
   businessHours: BusinessHoursEntry[]
 }
@@ -37,13 +38,57 @@ const DAY_NAMES_ES = [
 /** Orden Lunes → Domingo para listados */
 const DISPLAY_DAY_ORDER = [1, 2, 3, 4, 5, 6, 0] as const
 
+function compareTime(a: string, b: string): number {
+  return a.localeCompare(b, undefined, { numeric: true })
+}
+
+/** Convierte "HH:mm" (24 h) a "h:mm AM/PM". */
+function formatTimeAmPm(time: string): string {
+  const match = /^(\d{1,2}):(\d{2})$/.exec(time.trim())
+  if (!match) return time
+
+  const hours = Number.parseInt(match[1], 10)
+  const minutes = match[2]
+  if (Number.isNaN(hours) || hours < 0 || hours > 23) return time
+
+  const period = hours < 12 ? "AM" : "PM"
+  const hour12 = hours % 12 === 0 ? 12 : hours % 12
+  return `${hour12}:${minutes} ${period}`
+}
+
+/** Agrupa entradas por día y ordena cada día de más temprano a más tarde. */
+export function groupBusinessHoursByDay(
+  hours: BusinessHoursEntry[]
+): Map<number, BusinessHoursEntry[]> {
+  const byDay = new Map<number, BusinessHoursEntry[]>()
+  for (const entry of hours) {
+    const daySlots = byDay.get(entry.dayOfWeek) ?? []
+    daySlots.push(entry)
+    byDay.set(entry.dayOfWeek, daySlots)
+  }
+  for (const [day, slots] of byDay) {
+    byDay.set(
+      day,
+      [...slots].sort((a, b) => compareTime(a.opensAt, b.opensAt))
+    )
+  }
+  return byDay
+}
+
+function formatDaySchedule(slots: BusinessHoursEntry[]): string {
+  const openSlots = slots.filter((s) => !s.isClosed)
+  if (openSlots.length === 0) return "Cerrado"
+  return openSlots
+    .map((s) => `${formatTimeAmPm(s.opensAt)} a ${formatTimeAmPm(s.closesAt)}`)
+    .join(" · ")
+}
+
 export function formatBusinessHoursLines(hours: BusinessHoursEntry[]): string[] {
-  const byDay = new Map(hours.map((h) => [h.dayOfWeek, h]))
+  const byDay = groupBusinessHoursByDay(hours)
   return DISPLAY_DAY_ORDER.map((d) => {
-    const row = byDay.get(d)
-    if (!row) return `${DAY_NAMES_ES[d]} — Horario no disponible`
-    if (row.isClosed) return `${DAY_NAMES_ES[d]} — Cerrado`
-    return `${DAY_NAMES_ES[d]} — ${row.opensAt} a ${row.closesAt}`
+    const slots = byDay.get(d)
+    if (!slots?.length) return `${DAY_NAMES_ES[d]} — Horario no disponible`
+    return `${DAY_NAMES_ES[d]} — ${formatDaySchedule(slots)}`
   })
 }
 

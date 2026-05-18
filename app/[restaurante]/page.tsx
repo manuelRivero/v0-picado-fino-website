@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { PicadoFinoHome } from "@/components/restaurant-landings/picado-fino-home"
 import { LaEsquinaHome } from "@/components/restaurant-landings/la-esquina-home"
 import {
+  businessIdForSlug,
   isRestaurantSlug,
   OTHER_RESTAURANT,
   restaurantPath,
@@ -21,7 +22,7 @@ const PAGE_META_FALLBACK: Record<
     
     title: "Picado Fino",
     description:
-      "Una experiencia gastronómica sofisticada donde el asado argentino se eleva a su máxima expresión. Cortes premium, ambiente elegante y atención personalizada.",
+      "El lugar donde nos encanta ser tus anfitriones y hacerte sentir como en casa. Vení a disfrutar del verdadero asado argentino, en un ambiente ideal para compartir y con la calidez de nuestro servicio de siempre.",
   },
   "la-esquina": {
     title: "La Esquina de Picado",
@@ -47,12 +48,7 @@ export async function generateMetadata({
   const slug = restaurante as RestaurantSlug
   const fallback = PAGE_META_FALLBACK[slug]
 
-  const businessId =
-    slug === "picado-fino"
-      ? process.env.NEXT_PUBLIC_PICADO_ID?.trim()
-      : process.env.NEXT_PUBLIC_LA_ESQUINA_ID?.trim()
-
-  const business = await fetchBusiness(businessId ?? "")
+  const business = await fetchBusiness(businessIdForSlug(slug))
 
   const description =
     business?.description?.trim() || fallback.description
@@ -85,15 +81,12 @@ export default async function RestaurantePage({
   const basePath = restaurantPath(slug)
   const otherPath = restaurantPath(OTHER_RESTAURANT[slug])
 
-  const businessId =
-    slug === "picado-fino"
-      ? process.env.NEXT_PUBLIC_PICADO_ID?.trim()
-      : process.env.NEXT_PUBLIC_LA_ESQUINA_ID?.trim()
+  const businessId = businessIdForSlug(slug)
 
   const [featuredItems, menuItems, business] = await Promise.all([
-    fetchFeaturedItems(businessId ?? ""),
-    fetchMenuItems(businessId ?? ""),
-    fetchBusiness(businessId ?? ""),
+    fetchFeaturedItems(businessId),
+    fetchMenuItems(businessId),
+    fetchBusiness(businessId),
   ])
 
   if (slug === "picado-fino") {

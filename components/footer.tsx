@@ -2,13 +2,32 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { isRestaurantSlug } from "@/lib/restaurants"
+import { useRestaurantWhatsapp } from "@/components/restaurant-whatsapp-context"
+import {
+  isRestaurantSlug,
+  RESTAURANT_FOOTER_SOCIAL,
+  type RestaurantSlug,
+} from "@/lib/restaurants"
+import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 
 export function Footer() {
   const pathname = usePathname()
   const restaurantSlug = pathname.split("/")[1] ?? ""
   const isRestaurantPage = isRestaurantSlug(restaurantSlug)
+  const restaurantSlugTyped = isRestaurantPage ? (restaurantSlug as RestaurantSlug) : null
+  const whatsappContext = useRestaurantWhatsapp()
   const isHomePage = pathname === "/"
+
+  const links =
+    restaurantSlugTyped && whatsappContext?.slug === restaurantSlugTyped
+      ? whatsappContext.links
+      : restaurantSlugTyped
+        ? getRestaurantWhatsappLinks(restaurantSlugTyped, null)
+        : null
+
+  const social = restaurantSlugTyped
+    ? RESTAURANT_FOOTER_SOCIAL[restaurantSlugTyped]
+    : null
 
   return (
     <footer>
@@ -16,10 +35,9 @@ export function Footer() {
         <div className="footer-brand">
           <Link href="/" className="logo">Picadofino | La Esquina de Picado</Link>
           <p>
-            Fuego, tradición y equipo. Dos propuestas con una sola misión: llevar
+            Fuego, tradición y equipo. Dos propuestas con una sola misión: 
             <br />
-            la esencia de una buena comida a un momento memorable. La
-            <br />
+            llevar la esencia de una buena comida a un momento memorable. La
             excelencia de nuestra gente puesta al servicio de tu experiencia.
           </p>
         </div>
@@ -36,20 +54,45 @@ export function Footer() {
           <div className="footer-col">
             <h4>Nosotros</h4>
             <ul>
-              <li><a href="#manifiesto">Manifiesto</a></li>
               <li><a href="#lo-que-nos-define">Lo que nos define</a></li>
               <li><a href="#equipo">Equipo</a></li>
             </ul>
           </div>
         ) : null}
 
-        {isRestaurantPage ? (
+        {links && social ? (
           <div className="footer-col">
             <h4>Contacto</h4>
             <ul>
-              <li><a href="#reserva">Reservas</a></li>
-              <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-              <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+              {links.pedido ? (
+                <li>
+                  <a
+                    href={links.pedido}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Pedidos
+                  </a>
+                </li>
+              ) : null}
+              {links.reserva ? (
+                <li>
+                  <a
+                    href={links.reserva}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Reservas
+                  </a>
+                </li>
+              ) : null}
+              {social.map(({ label, href }) => (
+                <li key={label}>
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    {label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         ) : null}

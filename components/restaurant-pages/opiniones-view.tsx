@@ -2,12 +2,16 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Star, Quote, MessageCircle } from "lucide-react"
 import type { RestaurantSlug } from "@/lib/restaurants"
-import { RESTAURANT_WHATSAPP } from "@/lib/restaurants"
 import { getOpinionesConfig } from "@/lib/opiniones-data"
 
-export function OpinionesView({ slug }: { slug: RestaurantSlug }) {
+export function OpinionesView({
+  slug,
+  whatsappUrl,
+}: {
+  slug: RestaurantSlug
+  whatsappUrl?: string
+}) {
   const config = getOpinionesConfig(slug)
-  const whatsappUrl = RESTAURANT_WHATSAPP[slug]
 
   return (
     <div className="min-h-screen pt-24 pb-16 bg-background">
@@ -75,12 +79,14 @@ export function OpinionesView({ slug }: { slug: RestaurantSlug }) {
         <div className="bg-primary rounded-lg p-8 md:p-12 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">{config.cta.title}</h2>
           <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8">{config.cta.description}</p>
-          <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="w-5 h-5 mr-2" />
-              {slug === "la-esquina" ? "Pedir por WhatsApp" : "Reservar Ahora"}
-            </a>
-          </Button>
+          {whatsappUrl ? (
+            <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="w-5 h-5 mr-2" />
+                {slug === "la-esquina" ? "Pedir por WhatsApp" : "Reservar Ahora"}
+              </a>
+            </Button>
+          ) : null}
         </div>
       </div>
     </div>

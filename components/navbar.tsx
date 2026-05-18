@@ -3,35 +3,26 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
+import { useRestaurantWhatsapp } from "@/components/restaurant-whatsapp-context"
+import { isRestaurantSlug, type RestaurantSlug } from "@/lib/restaurants"
+import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 
-const restaurants = [
-  {
-    href: "/picado-fino",
-    navLabel: "Picado Fino",
-    whatsapp: "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20Picado%20Fino",
-    cta: "Reservar",
-    whatsappPedido:
-      "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20a%20domicilio%20en%20Picado%20Fino",
-    ctaPedido: "Hacer pedido",
-  },
-  {
-    href: "/la-esquina",
-    navLabel: "La Esquina de Picado",
-    whatsapp:
-      "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20La%20Esquina%20de%20Picado",
-    cta: "Reservar",
-    whatsappPedido:
-      "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20a%20domicilio%20en%20La%20Esquina",
-    ctaPedido: "Hacer pedido",
-  },
+const RESTAURANT_NAV = [
+  { href: "/picado-fino", slug: "picado-fino" as const, cta: "Reservar", ctaPedido: "Hacer pedido" },
+  { href: "/la-esquina", slug: "la-esquina" as const, cta: "Reservar", ctaPedido: "Hacer pedido" },
 ]
+
+function linksForSlug(slug: RestaurantSlug) {
+  return getRestaurantWhatsappLinks(slug, null)
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+  const whatsappContext = useRestaurantWhatsapp()
 
   const isHomepage = pathname === "/"
-  const currentRestaurant = restaurants.find(r => pathname.startsWith(r.href))
+  const currentRestaurant = RESTAURANT_NAV.find((r) => pathname.startsWith(r.href))
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 60)
@@ -52,6 +43,15 @@ export function Navbar() {
   }
 
   if (currentRestaurant) {
+    const slugFromPath = pathname.split("/")[1] ?? ""
+    const slug = isRestaurantSlug(slugFromPath) ? slugFromPath : currentRestaurant.slug
+    const links =
+      whatsappContext?.slug === slug
+        ? whatsappContext.links
+        : linksForSlug(slug)
+    const waReserva = links.reserva
+    const waPedido = links.pedido
+
     return (
       <nav className={`nav-restaurant${isScrolled ? " scrolled" : ""}`}>
         <Link href="/" className="nav-back">
@@ -60,18 +60,20 @@ export function Navbar() {
           </svg>
           <span>Inicio</span>
         </Link>
-        {"whatsappPedido" in currentRestaurant && currentRestaurant.whatsappPedido ? (
+        {waPedido ? (
           <div className="nav-restaurant-ctas">
-            {currentRestaurant.whatsapp && <a
-              href={currentRestaurant.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="nav-reserve"
-            >
-              {currentRestaurant.cta}
-            </a>}
+            {waReserva ? (
+              <a
+                href={waReserva}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-reserve"
+              >
+                {currentRestaurant.cta}
+              </a>
+            ) : null}
             <a
-              href={currentRestaurant.whatsappPedido}
+              href={waPedido}
               target="_blank"
               rel="noopener noreferrer"
               className="nav-reserve"
@@ -79,16 +81,16 @@ export function Navbar() {
               {currentRestaurant.ctaPedido}
             </a>
           </div>
-        ) : (
+        ) : waReserva ? (
           <a
-            href={currentRestaurant.whatsapp}
+            href={waReserva}
             target="_blank"
             rel="noopener noreferrer"
             className="nav-reserve"
           >
             {currentRestaurant.cta}
           </a>
-        )}
+        ) : null}
       </nav>
     )
   }

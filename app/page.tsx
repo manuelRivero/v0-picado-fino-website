@@ -21,14 +21,14 @@ type EquipoCategory = {
 
 const equipoCategories: EquipoCategory[] = [
   {
-    image: equipoFuego,
+    image: equipoCocina,
     imageAlt: "Maestros del fuego en la parrilla",
     categoryTitle: "Maestros del Fuego",
     categoryBody:
       "Son los guardianes de nuestra\ntradición, dominan el arte de las\nbrasas para que cada corte llegue a la\nmesa en su punto exacto. Es el oficio\nllevado a su máxima expresión.",
   },
   {
-    image: equipoCocina,
+    image: equipoFuego,
     imageAlt: "Equipo de cocina preparando platos",
     categoryTitle: "El Corazón de la Cocina",
     categoryBody:
@@ -133,7 +133,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== MANIFIESTO ===== */}
+      {/* ===== MARQUEE ===== */}
+      <div className="pf-filosofia-marquee">
+        <div className="pf-marquee-track">
+          {[...marqueeItems, ...marqueeItems].map((text, i) => (
+            <div key={i} className="pf-marquee-item">
+              <span className="pf-marquee-text pf-marquee-text--yellow pf-serif">{text}</span>
+              <div className="pf-marquee-dot" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ===== MANIFIESTO — desactivado temporalmente ===== */}
+      {false && (
       <section className="pf-manifiesto" id="manifiesto">
         <div>
           <div className="pf-section-label pf-sans pf-reveal">Manifiesto</div>
@@ -168,6 +181,7 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+      )}
 
       {/* ===== RESTAURANTES SPLIT ===== */}
       <section className="pf-restaurantes" id="restaurantes">
@@ -213,18 +227,6 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
           </div>
         </div>
       </section>
-
-      {/* ===== MARQUEE ===== */}
-      <div className="pf-filosofia-marquee">
-        <div className="pf-marquee-track">
-          {[...marqueeItems, ...marqueeItems].map((text, i) => (
-            <div key={i} className="pf-marquee-item">
-              <span className="pf-marquee-text pf-serif">{text}</span>
-              <div className="pf-marquee-dot" />
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ===== HISTORIA (Nuestro origen) — desactivado temporalmente ===== */}
       {false && (

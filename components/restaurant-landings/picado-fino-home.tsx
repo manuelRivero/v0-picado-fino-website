@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { type MenuItem, type PublicBusiness, formatItemPrice, whatsappMeUrl } from "@/lib/api"
+import { type MenuItem, type PublicBusiness, formatItemPrice } from "@/lib/api"
+import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
@@ -9,15 +10,6 @@ import image1 from "@/public/images/FOTO-01.jpg"
 import image3 from "@/public/images/FOTO-03.jpg"
 import image4 from "@/public/images/FOTO-04.jpg"
 import image5 from "@/public/images/FOTO-05.jpg"
-
-const MSG_RESERVA = "Hola quiero reservar una mesa en Picado Fino"
-const MSG_PEDIDO = "Hola quiero hacer un pedido a domicilio en Picado Fino"
-
-const FALLBACK_WHATSAPP_RESERVA =
-  "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20Picado%20Fino"
-
-const FALLBACK_WHATSAPP_PEDIDO =
-  "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20a%20domicilio%20en%20Picado%20Fino"
 
 type Props = {
   basePath: string
@@ -27,8 +19,10 @@ type Props = {
 }
 
 export function PicadoFinoHome({ featuredItems, business }: Props) {
-  const waReserva = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_RESERVA) ?? FALLBACK_WHATSAPP_RESERVA
-  const waPedido = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_PEDIDO) ?? FALLBACK_WHATSAPP_PEDIDO
+  const { reserva: waReserva, pedido: waPedido } = getRestaurantWhatsappLinks(
+    "picado-fino",
+    business?.whatsappPhoneNumber
+  )
   const heroRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 
@@ -87,8 +81,8 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
           <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(56px, 8vw, 110px)", fontWeight: 700, lineHeight: 0.9, letterSpacing: "-0.02em", color: "var(--pf-cream)", marginBottom: "12px" }}>
             Picado<br /><em style={{ fontStyle: "italic", color: "var(--brand-yellow)" }}>Fino</em>
           </h1>
-          <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "21px", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.65, marginBottom: "44px", maxWidth: "500px" }}>
-            Una experiencia gastronómica sofisticada donde el asado argentino se eleva a su máxima expresión. Cortes premium, ambiente elegante y atención personalizada.
+          <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "21px", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.65, marginBottom: "44px", maxWidth: "560px" }}>
+            El lugar donde nos encanta ser tus anfitriones y hacerte sentir como en casa. Vení a disfrutar del verdadero asado argentino, en un ambiente ideal para compartir y con la calidez de nuestro servicio de siempre.
           </p>
           <div className="pf-hero-ctas" style={{ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "center" }}>
             <a href={waReserva} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
