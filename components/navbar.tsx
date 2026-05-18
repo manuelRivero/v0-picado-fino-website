@@ -17,6 +17,9 @@ const restaurants = [
   {
     href: "/la-esquina",
     navLabel: "La Esquina de Picado",
+    whatsapp:
+      "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20La%20Esquina%20de%20Picado",
+    cta: "Reservar",
     whatsappPedido:
       "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20a%20domicilio%20en%20La%20Esquina",
     ctaPedido: "Hacer pedido",

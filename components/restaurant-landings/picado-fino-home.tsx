@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react"
 import { type MenuItem, type PublicBusiness, formatItemPrice, whatsappMeUrl } from "@/lib/api"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
+import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 import image1 from "@/public/images/FOTO-01.jpg"
-import image2 from "@/public/images/FOTO-02.jpg"
 import image3 from "@/public/images/FOTO-03.jpg"
 import image4 from "@/public/images/FOTO-04.jpg"
 import image5 from "@/public/images/FOTO-05.jpg"
@@ -107,8 +107,8 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
       </section>
 
       {/* ===== IDENTIDAD ===== */}
-      <section className="pf-identidad">
-        <div className="pf-identidad-text">
+      <section className="le-experiencia" id="experiencia">
+        <div className="le-menu-intro">
           <div className="pf-section-label pf-sans pf-reveal">La experiencia</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">
             El ritual del<br /><em>compartir</em>
@@ -132,14 +132,6 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-        <div className="pf-identidad-image pf-reveal pf-delay-1">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={image2.src} alt="Cortes premium Picado Fino" />
-          <div className="pf-identidad-caption">
-            <span className="pf-sans">Especialidad</span>
-            <strong className="pf-serif">Bife de Chorizo</strong>
           </div>
         </div>
       </section>
@@ -187,28 +179,7 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
       </section>
 
       {/* ===== GALERÍA ===== */}
-      <section style={{ borderTop: "1px solid rgba(245,240,232,0.06)" }}>
-        <div className="pf-galeria-grid">
-          <div className="pf-galeria-item">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="pf-galeria-img" src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=900&q=80" alt="Picado Fino interior" />
-          </div>
-          <div className="pf-galeria-item">
-            <div className="pf-galeria-placeholder"><span>{"foto\nsalón\nprincipal"}</span></div>
-          </div>
-          <div className="pf-galeria-item">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="pf-galeria-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=75" alt="Plato Picado Fino" />
-          </div>
-          <div className="pf-galeria-item">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="pf-galeria-img" src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600&q=75" alt="Parrilla" />
-          </div>
-          <div className="pf-galeria-item">
-            <div className="pf-galeria-placeholder"><span>{"foto\nvinos\ncarta"}</span></div>
-          </div>
-        </div>
-      </section>
+      <GalleryLandingSection slug="picado-fino" />
 
       {/* ===== RESERVA CTA ===== */}
       <section className="pf-reserva-cta" id="reserva">

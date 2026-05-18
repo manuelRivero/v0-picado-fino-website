@@ -8,7 +8,7 @@ export function Footer() {
   const pathname = usePathname()
   const restaurantSlug = pathname.split("/")[1] ?? ""
   const isRestaurantPage = isRestaurantSlug(restaurantSlug)
-  const isPicadoFino = restaurantSlug === "picado-fino"
+  const isHomePage = pathname === "/"
 
   return (
     <footer>
@@ -32,12 +32,13 @@ export function Footer() {
           </ul>
         </div>
 
-        {!isRestaurantPage ? (
+        {isHomePage ? (
           <div className="footer-col">
             <h4>Nosotros</h4>
             <ul>
-              <li><Link href="/#historia">Historia</Link></li>
-              <li><Link href="/#equipo">Equipo</Link></li>
+              <li><a href="#manifiesto">Manifiesto</a></li>
+              <li><a href="#lo-que-nos-define">Lo que nos define</a></li>
+              <li><a href="#equipo">Equipo</a></li>
             </ul>
           </div>
         ) : null}
@@ -46,9 +47,7 @@ export function Footer() {
           <div className="footer-col">
             <h4>Contacto</h4>
             <ul>
-              {isPicadoFino ? (
-                <li><a href="#reserva">Reservas</a></li>
-              ) : null}
+              <li><a href="#reserva">Reservas</a></li>
               <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
               <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a></li>
             </ul>

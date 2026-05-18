@@ -6,10 +6,17 @@ import { type MenuItem, type PublicBusiness, whatsappMeUrl } from "@/lib/api"
 import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
+import image1 from "@/public/images/01-esquina.jpg"
+import image2 from "@/public/images/02-esquina.jpg"
+import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 
+const MSG_RESERVA = "Hola quiero reservar una mesa en La Esquina de Picado"
 const MSG_WHATSAPP = "Hola quiero hacer un pedido en La Esquina de Picado"
 const MSG_PEDIDO =
   "Hola quiero un pedido para llevar o a domicilio en La Esquina de Picado"
+
+const FALLBACK_WHATSAPP_RESERVA =
+  "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20reservar%20una%20mesa%20en%20La%20Esquina%20de%20Picado"
 
 const FALLBACK_WHATSAPP =
   "https://wa.me/XXXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20en%20La%20Esquina"
@@ -25,6 +32,7 @@ type Props = {
 }
 
 export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, business }: Props) {
+  const waReserva = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_RESERVA) ?? FALLBACK_WHATSAPP_RESERVA
   const waGeneral = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_WHATSAPP) ?? FALLBACK_WHATSAPP
   const waPedido = whatsappMeUrl(business?.whatsappPhoneNumber, MSG_PEDIDO) ?? FALLBACK_PEDIDO
   const heroRef = useRef<HTMLElement>(null)
@@ -71,8 +79,8 @@ export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, busine
         <div
           ref={parallaxRef}
           style={{
-            position: "absolute", inset: "-10%",
-            backgroundImage: "url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=85')",
+              position: "absolute", inset: "-10%",
+              backgroundImage: `url(${image1.src})`,
             backgroundSize: "cover", backgroundPosition: "center", willChange: "transform",
           }}
         />
@@ -87,7 +95,10 @@ export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, busine
           </h1>
           <p className="pf-hero-subtitle pf-cormorant" style={{ fontSize: "20px", fontWeight: 300, fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.65, marginBottom: "44px", maxWidth: "500px" }}>
 Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y  cocina al paso en el corazón de Rosario.           </p>
-          <div className="pf-hero-ctas" style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          <div className="pf-hero-ctas" style={{ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "center" }}>
+            <a href={waReserva} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
+              Reservar mesa
+            </a>
             <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="pf-btn-primary pf-sans">
               Hacer pedido
             </a>
@@ -102,8 +113,8 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
 
       {/* ===== PROPUESTA ===== */}
       <section className="le-propuesta">
-        <div className="le-propuesta-text">
-          <div className="pf-section-label pf-sans pf-reveal">Quiénes somos</div>
+        <div className="le-propuesta-content">
+          <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Quiénes somos</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">
             Mismo equipo, misma pasión,<br />pero al ritmo de la ciudad.
           </h2>
@@ -115,18 +126,6 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
               <span key={tag} className="le-prop-tag pf-sans">{tag}</span>
             ))}
           </div>
-        </div>
-        <div className="le-propuesta-right pf-reveal pf-delay-1">
-          {[
-            { num: "1", suffix: "+", label: "Locación en Rosario" },
-            { num: "0", suffix: "", label: "Atajos en la cocina" },
-            { num: "∞", suffix: "", label: "Motivos para volver" },
-          ].map(({ num, suffix, label }) => (
-            <div key={label} className="le-propuesta-stat">
-              <div className="le-stat-big pf-serif">{num}<span>{suffix}</span></div>
-              <div className="le-stat-desc pf-sans">{label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -173,38 +172,23 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
 
       {business ? <BusinessHoursLocation business={business} /> : null}
 
-      {/* ===== AMBIENTE ===== */}
-      <section className="le-ambiente">
-        <div className="le-ambiente-intro">
-          <div>
-            <div className="pf-section-label pf-sans pf-reveal">El ambiente</div>
-            <h2 className="pf-reveal pf-delay-1 pf-serif">
-              Tu lugar de<br />todos los<br /><em>días</em>
-            </h2>
-          </div>
-          <p className="pf-cormorant pf-reveal pf-delay-2" style={{ fontSize: "20px", fontStyle: "italic", color: "var(--pf-body-text)", lineHeight: 1.7, alignSelf: "end" }}>
-            Espacios diseñados para que te sientas como en casa. Cómodos, vivos, con el olor a parrilla que te lleva directo a la mesa.
-          </p>
+      <GalleryLandingSection slug="la-esquina" className="le-ambiente" />
+
+      {/* ===== RESERVA CTA ===== */}
+      <section className="pf-reserva-cta" id="reserva">
+        <div className="pf-reserva-cta-bg" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={image2.src} alt="" className="pf-reserva-cta-bg-img" style={{ width: "100%" }} />
         </div>
-        <div className="le-ambiente-mosaic">
-          <div className="le-mosaic-item">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="le-mosaic-img" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="La Esquina interior" />
-          </div>
-          <div className="le-mosaic-item">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="le-mosaic-img" src="https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=75" alt="Plato casual" />
-          </div>
-          <div className="le-mosaic-item">
-            <div className="le-mosaic-placeholder"><span>{"foto\nexterior\nlocal"}</span></div>
-          </div>
-          <div className="le-mosaic-item">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="le-mosaic-img" src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=900&q=80" alt="Parrilla La Esquina" />
-          </div>
-          <div className="le-mosaic-item">
-            <div className="le-mosaic-placeholder"><span>{"foto\nmostrador\ntake out"}</span></div>
-          </div>
+        <div className="pf-reserva-cta-content">
+          <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Reservas</div>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">Tu lugar en nuestro<br /><em>local</em></h2>
+          <p className="pf-reveal pf-delay-2 pf-cormorant">
+            Vení a disfrutar en el salón. Reservá tu mesa y dejanos preparar todo para que tu única tarea sea disfrutar del momento.
+          </p>
+          <a href={waReserva} target="_blank" rel="noopener noreferrer" className="pf-btn-amber pf-sans pf-reveal pf-delay-3">
+            Hacer una reserva
+          </a>
         </div>
       </section>
 
@@ -223,7 +207,8 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
         </div>
       </section>
 
-      {/* ===== CTA CRUCE → Picado Fino ===== */}
+      {/* ===== CTA CRUCE → Picado Fino — desactivado temporalmente ===== */}
+      {false && (
       <section className="le-cta-cruce">
         <div className="le-cta-cruce-left pf-reveal">
           <div className="pf-section-label pf-sans">¿Buscás algo más?</div>
@@ -240,6 +225,7 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
           <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=900&q=80" alt="Picado Fino fine dining" />
         </div>
       </section>
+      )}
 
     </div>
   )

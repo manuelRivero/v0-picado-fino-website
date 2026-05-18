@@ -1,10 +1,47 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import Image from "next/image"
 import Link from "next/link"
+import type { StaticImageData } from "next/image"
 import image1 from "@/public/images/1.jpg"
 import image2 from "@/public/images/2.jpg"
 import image3 from "@/public/images/3.jpg"
+import equipoCocina from "@/public/images/FOTO-04.jpg"
+import equipoFuego  from "@/public/images/FOTO-05.jpg"
+import equipoExperiencia from "@/public/images/FOTO-06.jpg"
+import ctaFinalBg from "@/public/images/FOTO-7.jpg"
+
+type EquipoCategory = {
+  image: StaticImageData
+  imageAlt: string
+  categoryTitle: string
+  categoryBody: string
+}
+
+const equipoCategories: EquipoCategory[] = [
+  {
+    image: equipoFuego,
+    imageAlt: "Maestros del fuego en la parrilla",
+    categoryTitle: "Maestros del Fuego",
+    categoryBody:
+      "Son los guardianes de nuestra\ntradición, dominan el arte de las\nbrasas para que cada corte llegue a la\nmesa en su punto exacto. Es el oficio\nllevado a su máxima expresión.",
+  },
+  {
+    image: equipoCocina,
+    imageAlt: "Equipo de cocina preparando platos",
+    categoryTitle: "El Corazón de la Cocina",
+    categoryBody:
+      "Donde la técnica se encuentra con la\ncreatividad. Nuestro equipo de cocina\ntransforma la materia prima en platos con\nidentidad. Hoy, celebramos la llegada de\nnuestras pastas caseras, elaboradas cada\ndía con manos artesanas y el compromiso de\nofrecer un sabor que se siente como en casa.",
+  },
+  {
+    image: equipoExperiencia,
+    imageAlt: "Personal de sala atendiendo a los comensales",
+    categoryTitle: "Embajadores de la Experiencia",
+    categoryBody:
+      "Nuestros mozos y personal de atención al\ncliente son el puente entre nuestra cocina\ny tu mesa. Con la calidez rosarina que\nnos define, se encargan de que cada\nencuentro sea fluido, cercano y\nprofesional. Son los anfitriones que hacen\nque siempre quieras volver.",
+  },
+]
 
 const marqueeItems = [
   "Hay equipo",
@@ -88,10 +125,6 @@ export default function HomePage() {
           </p>
           <div className="pf-hero-ctas" style={{ display: "flex", gap: "20px", alignItems: "center" }}>
             <a href="#restaurantes" className="pf-btn-primary pf-sans">Descubrir</a>
-            <a href="#historia" className="pf-btn-ghost pf-sans">
-              <span className="pf-arrow" />
-              Nuestra historia
-            </a>
           </div>
         </div>
         <div className="pf-hero-scroll" style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
@@ -101,7 +134,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== MANIFIESTO ===== */}
-      <section className="pf-manifiesto">
+      <section className="pf-manifiesto" id="manifiesto">
         <div>
           <div className="pf-section-label pf-sans pf-reveal">Manifiesto</div>
           <div className="pf-manifiesto-stats">
@@ -223,7 +256,7 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
       )}
 
       {/* ===== VALORES ===== */}
-      <section className="pf-valores">
+      <section className="pf-valores" id="lo-que-nos-define">
         <div className="pf-section-label pf-sans pf-reveal">Lo que nos define</div>
         <h2 className="pf-reveal pf-delay-1 pf-serif">Creemos en<br />lo <em>auténtico</em></h2>
         <div className="pf-valores-grid">
@@ -266,30 +299,15 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
           </div>
         </div>
         <div className="pf-equipo-grid">
-          {[
-            {
-              label: "foto\ncategoría",
-              categoryTitle: "Maestros del Fuego",
-              categoryBody:
-                "Son los guardianes de nuestra\ntradición, dominan el arte de las\nbrasas para que cada corte llegue a la\nmesa en su punto exacto. Es el oficio\nllevado a su máxima expresión.",
-            },
-            {
-              label: "foto\ncategoría",
-              categoryTitle: "El Corazón de la Cocina",
-              categoryBody:
-                "Donde la técnica se encuentra con la\ncreatividad. Nuestro equipo de cocina\ntransforma la materia prima en platos con\nidentidad. Hoy, celebramos la llegada de\nnuestras pastas caseras, elaboradas cada\ndía con manos artesanas y el compromiso de\nofrecer un sabor que se siente como en casa.",
-            },
-            {
-              label: "foto\ncategoría",
-              categoryTitle: "Embajadores de la Experiencia",
-              categoryBody:
-                "Nuestros mozos y personal de atención al\ncliente son el puente entre nuestra cocina\ny tu mesa. Con la calidez rosarina que\nnos define, se encargan de que cada\nencuentro sea fluido, cercano y\nprofesional. Son los anfitriones que hacen\nque siempre quieras volver.",
-            },
-          ].map((item, i) => (
-            <div key={i} className={`pf-chef-card pf-reveal${i > 0 ? ` pf-delay-${i}` : ""}`}>
-              <div className="pf-chef-placeholder">
-                <span className="pf-chef-placeholder-text pf-sans">{item.label}</span>
-              </div>
+          {equipoCategories.map((item, i) => (
+            <div key={item.categoryTitle} className={`pf-chef-card pf-reveal${i > 0 ? ` pf-delay-${i}` : ""}`}>
+              <Image
+                src={item.image}
+                alt={item.imageAlt}
+                fill
+                sizes="(max-width: 100%) 100vw, 33vw"
+                className="pf-chef-photo"
+              />
               <div className="pf-chef-info pf-chef-info--category">
                 <div className="pf-chef-category-title pf-serif">{item.categoryTitle}</div>
                 <p className="pf-chef-category-desc pf-cormorant">{item.categoryBody}</p>
@@ -301,7 +319,11 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
 
       {/* ===== CTA FINAL ===== */}
       <section className="pf-cta-final" id="reservas">
-        <div className="pf-cta-final-bg" />
+        <div
+          className="pf-cta-final-bg"
+          style={{ backgroundImage: `url(${ctaFinalBg.src})` }}
+          aria-hidden
+        />
         <div className="pf-cta-final-content">
           <div className="pf-section-label pf-sans pf-reveal" style={{ justifyContent: "center" }}>Reservas</div>
           <h2 className="pf-reveal pf-delay-1 pf-serif">
