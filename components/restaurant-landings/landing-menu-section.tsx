@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { type MenuItem, formatItemPrice } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
@@ -40,6 +40,16 @@ export function LandingMenuSection({
   const [activeCategoryId, setActiveCategoryId] = useState(
     () => categories[0]?.id ?? ""
   )
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      if (activeCategoryId !== "") setActiveCategoryId("")
+      return
+    }
+    if (!categories.some((c) => c.id === activeCategoryId)) {
+      setActiveCategoryId(categories[0].id)
+    }
+  }, [categories, activeCategoryId])
 
   const activeCategory =
     categories.find((c) => c.id === activeCategoryId) ?? categories[0]

@@ -145,6 +145,29 @@ export function formatItemPrice(item: Pick<MenuItem, "price" | "prices">): strin
   return `${p.currencyCode} ${formattedAmount}`
 }
 
+function parseMenuItemsPayload(data: unknown): MenuItem[] {
+  if (!data || typeof data !== "object") return []
+
+  const record = data as Record<string, unknown>
+  const raw =
+    record.items ??
+    record.menuItems ??
+    (record.data && typeof record.data === "object"
+      ? (record.data as Record<string, unknown>).items
+      : undefined)
+
+  if (!Array.isArray(raw)) return []
+
+  return raw.filter(
+    (item): item is MenuItem =>
+      Boolean(item) &&
+      typeof item === "object" &&
+      typeof (item as MenuItem).id === "string" &&
+      typeof (item as MenuItem).name === "string" &&
+      (item as MenuItem).name.trim().length > 0
+  )
+}
+
 async function fetchMenuItemsFromPath(
   baseUrl: string,
   path: string
@@ -153,8 +176,8 @@ async function fetchMenuItemsFromPath(
     const res = await fetch(`${baseUrl}${path}`, { next: { revalidate: 60 } })
     if (!res.ok) return []
 
-    const data = (await res.json()) as { items?: MenuItem[] }
-    return Array.isArray(data.items) ? data.items : []
+    const data: unknown = await res.json()
+    return parseMenuItemsPayload(data)
   } catch {
     return []
   }

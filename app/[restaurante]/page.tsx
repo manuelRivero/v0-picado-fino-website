@@ -10,7 +10,7 @@ import {
   RESTAURANT_SLUGS,
   type RestaurantSlug,
 } from "@/lib/restaurants"
-import { fetchBusiness, fetchFeaturedItems, fetchMenuItems } from "@/lib/api"
+import { fetchBusiness, fetchFeaturedItems } from "@/lib/api"
 
 export const revalidate = 60
 
@@ -83,9 +83,8 @@ export default async function RestaurantePage({
 
   const businessId = businessIdForSlug(slug)
 
-  const [featuredItems, menuItems, business] = await Promise.all([
+  const [featuredItems, business] = await Promise.all([
     fetchFeaturedItems(businessId),
-    fetchMenuItems(businessId),
     fetchBusiness(businessId),
   ])
 
@@ -104,7 +103,7 @@ export default async function RestaurantePage({
     <LaEsquinaHome
       basePath={basePath}
       otherRestaurantPath={otherPath}
-      menuItems={menuItems}
+      featuredItems={featuredItems}
       business={business}
     />
   )

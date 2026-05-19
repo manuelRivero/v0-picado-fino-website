@@ -2,11 +2,10 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { type MenuItem, type PublicBusiness } from "@/lib/api"
+import { type MenuItem, type PublicBusiness, formatItemPrice } from "@/lib/api"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
-import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import image1 from "@/public/images/01-esquina.jpg"
 import image2 from "@/public/images/02-esquina.jpg"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
@@ -15,11 +14,11 @@ import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-
 type Props = {
   basePath: string
   otherRestaurantPath: string
-  menuItems: MenuItem[]
+  featuredItems: MenuItem[]
   business: PublicBusiness | null
 }
 
-export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, business }: Props) {
+export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: Props) {
   const links = getRestaurantWhatsappLinks("la-esquina", business?.whatsappPhoneNumber)
   const waReserva = links.reserva
   const waGeneral = links.general
@@ -126,21 +125,29 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
         items={LA_ESQUINA_EXPERIENCE_ITEMS}
       />
 
-      <section className="le-menu-casual le-landing-menu-section" id="menu">
-        <div className="le-menu-intro le-menu-intro--compact">
-          <div className="pf-section-label pf-sans pf-reveal">Menú</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">
-            Nuestra carta<br /><em>al día</em>
-          </h2>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Precios y platos actualizados desde nuestro sistema. Elegí una categoría y armá tu pedido.
+      <section className="pf-menu-section" id="menu">
+        <div className="pf-menu-header">
+          <div>
+            <div className="pf-section-label pf-sans pf-reveal">Menú</div>
+            <h2 className="pf-reveal pf-delay-1 pf-serif">
+              Nuestra carta<br /><em>al día</em>
+            </h2>
+          </div>
+          <p className="pf-menu-header-text pf-cormorant pf-reveal pf-delay-2">
+            Los platos destacados de La Esquina, con precios actualizados desde nuestro sistema.
           </p>
         </div>
-        <LandingMenuSection
-          items={menuItems}
-          menuPageHref={`${basePath}/menu`}
-          variant="list"
-        />
+        <div className="pf-menu-grid pf-reveal">
+          {featuredItems.map((item) => (
+            <div key={item.id} className="pf-menu-item">
+              <div>
+                <div className="pf-menu-item-name pf-serif">{item.name}</div>
+                <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
+              </div>
+              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item)}</div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {business ? <BusinessHoursLocation business={business} /> : null}
