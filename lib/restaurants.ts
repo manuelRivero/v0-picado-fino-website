@@ -8,8 +8,8 @@ export function isRestaurantSlug(value: string): value is RestaurantSlug {
 
 /** Ruta base del otro restaurante para enlaces cruzados */
 export const OTHER_RESTAURANT: Record<RestaurantSlug, RestaurantSlug> = {
-  "picado-fino": "la-esquina",
-  "la-esquina": "picado-fino",
+  "picado-fino": "picado-fino",
+  "la-esquina": "la-esquina",
 }
 
 export function restaurantPath(slug: RestaurantSlug): string {
