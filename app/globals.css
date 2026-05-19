@@ -181,6 +181,22 @@ nav.scrolled {
 .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--amber); transition: width 0.3s ease; }
 .nav-links a:hover { opacity: 1; }
 .nav-links a:hover::after { width: 100%; }
+nav.nav-home,
+nav.nav-restaurant {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.nav-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.nav-row-logo { justify-content: flex-start; }
+.nav-row-actions { justify-content: space-between; gap: 16px; }
+.nav-home .nav-row-actions { justify-content: flex-end; }
+.nav-restaurant-logo { display: block; width: auto; height: 32px; max-width: 200px; object-fit: contain; object-position: left center; }
 .nav-back { display: flex; align-items: center; gap: 10px; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-body); text-decoration: none; opacity: 0.6; transition: opacity 0.3s; }
 .nav-back:hover { opacity: 1; }
 .nav-back svg { transition: transform 0.3s; }
@@ -1124,6 +1140,32 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   border-top: 1px solid rgba(245,240,232,0.06);
   background: var(--pf-carbon);
 }
+.le-experiencia-grid {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: stretch;
+}
+.le-experiencia-content .le-menu-intro--experiencia {
+  max-width: none;
+  margin-bottom: 0;
+}
+.le-experiencia-content .le-menu-intro--experiencia p {
+  margin-bottom: 48px;
+}
+.le-experiencia-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
+.le-experiencia-logo-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100%;
+  max-height: min(280px, 42vh);
+  object-fit: contain;
+}
 
 /* Menu casual (La Esquina horizontal list) */
 .le-menu-casual {
@@ -1294,6 +1336,9 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 
   /* La Esquina — Menú casual */
   .le-experiencia { padding: 100px 32px; }
+  .le-experiencia-grid { grid-template-columns: 1fr; gap: 48px; }
+  .le-experiencia-logo { min-height: auto; padding: 8px 0; }
+  .le-experiencia-logo-img { max-height: 140px; }
   .le-menu-casual { padding: 100px 32px; }
   .le-menu-intro { margin-bottom: 52px; }
 
@@ -1312,6 +1357,10 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   .nav-links a { font-size: 10px; letter-spacing: 0.12em; }
 
   /* Nav — restaurante */
+  nav.nav-home,
+  nav.nav-restaurant { gap: 10px; }
+  .nav-row-actions { gap: 12px; }
+  .nav-restaurant-logo { height: 24px; max-width: 150px; }
   .nav-reserve { padding: 8px 14px; font-size: 9px; letter-spacing: 0.16em; }
   .nav-restaurant-ctas { gap: 6px; }
   /* Footer */
@@ -1403,6 +1452,9 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
 
   /* La Esquina — Menú casual */
   .le-experiencia { padding: 80px 20px; }
+  .le-experiencia-grid { gap: 36px; }
+  .le-experiencia-logo-img { max-height: 100px; }
+  .le-experiencia-content .le-menu-intro--experiencia p { margin-bottom: 36px; }
   .le-menu-casual { padding: 80px 20px; }
   .le-menu-intro { margin-bottom: 40px; }
   .le-menu-row {
@@ -1424,9 +1476,9 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
    RESPONSIVE — Mobile pequeño (max-width: 479px)
    ============================================================ */
 @media (max-width: 479px) {
-  /* Nav logos reducidos */
-  .nav-logo { font-size: 14px; letter-spacing: 0.12em; }
+  /* Nav home — enlaces ocultos en pantallas muy pequeñas */
   .nav-links { display: none; }
+  .nav-restaurant-logo { height: 20px; max-width: 128px; }
 
   /* Secciones aún más compactas */
   .pf-manifiesto { padding: 64px 16px; }
@@ -1443,6 +1495,7 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   .le-propuesta h2 { font-size: clamp(32px, 7vw, 48px); margin-bottom: 16px; }
   .le-propuesta p { font-size: 16px; margin-bottom: 28px; }
   .le-experiencia { padding: 64px 16px; }
+  .le-experiencia-logo-img { max-height: 80px; }
   .le-menu-casual { padding: 64px 16px; }
   .le-cta-cruce-left { padding: 48px 16px; }
   footer { padding: 44px 16px 24px; }

@@ -5,11 +5,20 @@ import { type MenuItem, type PublicBusiness, formatItemPrice } from "@/lib/api"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
+import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 import image1 from "@/public/images/FOTO-01.jpg"
 import image3 from "@/public/images/FOTO-03.jpg"
 import image4 from "@/public/images/FOTO-04.jpg"
 import image5 from "@/public/images/FOTO-05.jpg"
+
+const PICADO_FINO_EXPERIENCE_ITEMS = [
+  ["01", "Bebidas & Entradas", "El brindis ideal con etiquetas emblemáticas y nuestras entradas más clásicas."],
+  ["02", "Parrilla", "Cortes seleccionados y fuego lento para honrar la tradición del asado."],
+  ["03", "Pastas Caseras", "Orgullo artesanal: amasadas a mano cada mañana con dedicación diaria."],
+  ["04", "Pizzanesas", "Sabor y abundancia para compartir, con el toque único de nuestra cocina."],
+  ["05", "Postres, el final", "El broche de oro dulce para que tu visita sea inolvidable."],
+] as const
 
 type Props = {
   basePath: string
@@ -100,35 +109,13 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
         </div>
       </section>
 
-      {/* ===== IDENTIDAD ===== */}
-      <section className="le-experiencia" id="experiencia">
-        <div className="le-menu-intro">
-          <div className="pf-section-label pf-sans pf-reveal">La experiencia</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">
-            El ritual del<br /><em>compartir</em>
-          </h2>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">
-            En cada plato servimos una historia. Desde el fuego que no descansa hasta la harina que amasamos cada mañana, seleccionamos ingredientes reales para crear momentos extraordinarios. Te invitamos a conocer un camino de sabores diseñado para gratificar todos tus sentidos.
-          </p>
-          <div className="pf-identidad-features pf-reveal pf-delay-3">
-            {[
-              ["01", "Bebidas & Entradas", "El brindis ideal con etiquetas emblemáticas y nuestras entradas más clásicas."],
-              ["02", "Parrilla", "Cortes seleccionados y fuego lento para honrar la tradición del asado."],
-              ["03", "Pastas Caseras", "Orgullo artesanal: amasadas a mano cada mañana con dedicación diaria."],
-              ["04", "Pizzanesas", "Sabor y abundancia para compartir, con el toque único de nuestra cocina."],
-              ["05", "Postres, el final", "El broche de oro dulce para que tu visita sea inolvidable."],
-            ].map(([num, name, desc]) => (
-              <div key={num} className="pf-feature-row">
-                <span className="pf-feature-num pf-serif">{num}</span>
-                <div className="pf-feature-content">
-                  <span className="pf-feature-name pf-sans">{name}</span>
-                  {desc ? <p className="pf-feature-desc pf-cormorant">{desc}</p> : null}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ExperienceSection
+        logoSrc="/images/logo-picadofino.png"
+        logoAlt="Picado Fino"
+        title={<>El ritual del<br /><em>compartir</em></>}
+        intro="En cada plato servimos una historia. Desde el fuego que no descansa hasta la harina que amasamos cada mañana, seleccionamos ingredientes reales para crear momentos extraordinarios. Te invitamos a conocer un camino de sabores diseñado para gratificar todos tus sentidos."
+        items={PICADO_FINO_EXPERIENCE_ITEMS}
+      />
 
       {/* ===== MENU ===== */}
       <section className="pf-menu-section" id="menu">

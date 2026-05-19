@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
@@ -8,8 +9,22 @@ import { isRestaurantSlug, type RestaurantSlug } from "@/lib/restaurants"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 
 const RESTAURANT_NAV = [
-  { href: "/picado-fino", slug: "picado-fino" as const, cta: "Reservar", ctaPedido: "Hacer pedido" },
-  { href: "/la-esquina", slug: "la-esquina" as const, cta: "Reservar", ctaPedido: "Hacer pedido" },
+  {
+    href: "/picado-fino",
+    slug: "picado-fino" as const,
+    logo: "/images/logo-picadofino.png",
+    logoAlt: "Picado Fino",
+    cta: "Reservar",
+    ctaPedido: "Hacer pedido",
+  },
+  {
+    href: "/la-esquina",
+    slug: "la-esquina" as const,
+    logo: "/images/logo-la-esquina.png",
+    logoAlt: "La Esquina de Picado",
+    cta: "Reservar",
+    ctaPedido: "Hacer pedido",
+  },
 ]
 
 function linksForSlug(slug: RestaurantSlug) {
@@ -32,12 +47,13 @@ export function Navbar() {
 
   if (isHomepage) {
     return (
-      <nav className={isScrolled ? "scrolled" : ""}>
-        <Link href="/" className="nav-logo">Picadofino</Link>
-        <ul className="nav-links">
-          <li><Link href="/picado-fino">Picado fino</Link></li>
-          <li><Link href="/la-esquina">La esquina de picado</Link></li>
-        </ul>
+      <nav className={`nav-home${isScrolled ? " scrolled" : ""}`}>
+        <div className="nav-row nav-row-actions">
+          <ul className="nav-links">
+            <li><Link href="/picado-fino">Picado fino</Link></li>
+            <li><Link href="/la-esquina">La esquina de picado</Link></li>
+          </ul>
+        </div>
       </nav>
     )
   }
@@ -52,36 +68,9 @@ export function Navbar() {
     const waReserva = links.reserva
     const waPedido = links.pedido
 
-    return (
-      <nav className={`nav-restaurant${isScrolled ? " scrolled" : ""}`}>
-        <Link href="/" className="nav-back">
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
-            <path d="M18 6H2M2 6L7 1M2 6L7 11" stroke="currentColor" strokeWidth="1.2"/>
-          </svg>
-          <span>Inicio</span>
-        </Link>
-        {waPedido ? (
-          <div className="nav-restaurant-ctas">
-            {waReserva ? (
-              <a
-                href={waReserva}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="nav-reserve"
-              >
-                {currentRestaurant.cta}
-              </a>
-            ) : null}
-            <a
-              href={waPedido}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="nav-reserve"
-            >
-              {currentRestaurant.ctaPedido}
-            </a>
-          </div>
-        ) : waReserva ? (
+    const ctas = waPedido ? (
+      <div className="nav-restaurant-ctas">
+        {waReserva ? (
           <a
             href={waReserva}
             target="_blank"
@@ -91,6 +80,49 @@ export function Navbar() {
             {currentRestaurant.cta}
           </a>
         ) : null}
+        <a
+          href={waPedido}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-reserve"
+        >
+          {currentRestaurant.ctaPedido}
+        </a>
+      </div>
+    ) : waReserva ? (
+      <div className="nav-restaurant-ctas">
+        <a
+          href={waReserva}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-reserve"
+        >
+          {currentRestaurant.cta}
+        </a>
+      </div>
+    ) : null
+
+    return (
+      <nav className={`nav-restaurant${isScrolled ? " scrolled" : ""}`}>
+        <div className="nav-row nav-row-logo">
+          <Image
+            src={currentRestaurant.logo}
+            alt={currentRestaurant.logoAlt}
+            width={220}
+            height={44}
+            className="nav-restaurant-logo"
+            priority
+          />
+        </div>
+        <div className="nav-row nav-row-actions">
+          <Link href="/" className="nav-back">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+              <path d="M18 6H2M2 6L7 1M2 6L7 11" stroke="currentColor" strokeWidth="1.2"/>
+            </svg>
+            <span>Inicio</span>
+          </Link>
+          {ctas}
+        </div>
       </nav>
     )
   }

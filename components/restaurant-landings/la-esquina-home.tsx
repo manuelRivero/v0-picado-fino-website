@@ -9,6 +9,7 @@ import { BusinessHoursLocation } from "@/components/restaurant-landings/business
 import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import image1 from "@/public/images/01-esquina.jpg"
 import image2 from "@/public/images/02-esquina.jpg"
+import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 
 type Props = {
@@ -117,29 +118,13 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
         </div>
       </section>
 
-      {/* ===== LA EXPERIENCIA (contenido editorial fijo) ===== */}
-      <section className="le-experiencia" id="experiencia">
-        <div className="le-menu-intro">
-          <div className="pf-section-label pf-sans pf-reveal">La experiencia</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">
-            Sabor Urbano,<br />Placer a lo Grande
-          </h2>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Mismo equipo, misma pasión, pero al ritmo de la ciudad. En La Esquina cocinamos pensando en grande y para compartir. Te presentamos a los verdaderos pesos pesados de nuestra carta, diseñados para devorar solos o en compañía.
-          </p>
-          <div className="pf-identidad-features pf-reveal pf-delay-3">
-            {LA_ESQUINA_EXPERIENCE_ITEMS.map(([num, name, desc]) => (
-              <div key={num} className="pf-feature-row">
-                <span className="pf-feature-num pf-serif">{num}</span>
-                <div className="pf-feature-content">
-                  <span className="pf-feature-name pf-sans">{name}</span>
-                  <p className="pf-feature-desc pf-cormorant">{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ExperienceSection
+        logoSrc="/images/logo-la-esquina.png"
+        logoAlt="La Esquina de Picado"
+        title={<>Sabor Urbano,<br />Placer a lo Grande</>}
+        intro="Mismo equipo, misma pasión, pero al ritmo de la ciudad. En La Esquina cocinamos pensando en grande y para compartir. Te presentamos a los verdaderos pesos pesados de nuestra carta, diseñados para devorar solos o en compañía."
+        items={LA_ESQUINA_EXPERIENCE_ITEMS}
+      />
 
       <section className="le-menu-casual le-landing-menu-section" id="menu">
         <div className="le-menu-intro le-menu-intro--compact">
