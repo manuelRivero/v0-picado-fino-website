@@ -1,6 +1,7 @@
 export type BusinessLocation = {
   latitude: number
   longitude: number
+  mapsUrl?: string
 }
 
 export type BusinessHoursEntry = {
@@ -21,6 +22,8 @@ export type PublicBusiness = {
   currencyCode: string
   whatsappPhoneNumber?: string | null
   streetAddress?: string
+  addressNotes?: string
+  mapsUrl?: string
   location: BusinessLocation
   businessHours: BusinessHoursEntry[]
 }
@@ -99,7 +102,15 @@ export function whatsappMeUrl(phone: string | undefined | null, message: string)
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`
 }
 
-export function mapsUrl(loc: BusinessLocation | undefined | null): string | null {
+export function mapsUrl(
+  business: Pick<PublicBusiness, "mapsUrl" | "location"> | undefined | null
+): string | null {
+  if (!business) return null
+
+  const fromApi = business.mapsUrl?.trim() || business.location?.mapsUrl?.trim()
+  if (fromApi) return fromApi
+
+  const loc = business.location
   if (!loc || typeof loc.latitude !== "number" || typeof loc.longitude !== "number") return null
   return `https://www.google.com/maps?q=${loc.latitude},${loc.longitude}`
 }

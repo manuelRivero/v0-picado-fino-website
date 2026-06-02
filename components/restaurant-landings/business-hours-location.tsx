@@ -19,7 +19,7 @@ export function BusinessHoursLocation({ business }: { business: PublicBusiness }
   const hoursLines =
     business.businessHours?.length ? formatBusinessHoursLines(business.businessHours) : []
   const streetAddress = business.streetAddress?.trim() ?? ""
-  const mapHref = mapsUrl(business.location)
+  const mapHref = mapsUrl(business)
 
   if (!hoursLines.length && !streetAddress && !mapHref) return null
 
