@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { normalizePlaceReviews } from "@/lib/places/normalize"
 import type { GooglePlaceDetailsRaw, PlaceReviewsData } from "@/lib/places/types"
+import { getInvalidPlaceIdMessage, isValidGooglePlaceId } from "@/lib/places/validate"
 
 export type GooglePlacesReviewsState =
   | { status: "idle" | "loading" }
@@ -12,9 +13,20 @@ export type GooglePlacesReviewsState =
 const cache = new Map<string, PlaceReviewsData>()
 const inflight = new Map<string, Promise<PlaceReviewsData>>()
 
+type GooglePlacesErrorResponse = {
+  error?: {
+    message?: string
+    status?: string
+  }
+}
+
 async function fetchPlaceReviews(placeId: string): Promise<PlaceReviewsData> {
   const cached = cache.get(placeId)
   if (cached) return cached
+
+  if (!isValidGooglePlaceId(placeId)) {
+    throw new Error(getInvalidPlaceIdMessage(placeId))
+  }
 
   const apiKey = process.env.NEXT_PUBLIC_PLACES_KEY?.trim()
   if (!apiKey) {
@@ -33,11 +45,24 @@ async function fetchPlaceReviews(placeId: string): Promise<PlaceReviewsData> {
       },
     })
       .then(async (res) => {
+        const payload = (await res.json()) as GooglePlaceDetailsRaw | GooglePlacesErrorResponse
+
         if (!res.ok) {
-          throw new Error("No pudimos cargar las reseñas en este momento.")
+          const apiMessage =
+            "error" in payload && payload.error?.message?.trim()
+              ? payload.error.message.trim()
+              : null
+
+          if (apiMessage?.toLowerCase().includes("place id") && apiMessage.toLowerCase().includes("not valid")) {
+            throw new Error(
+              "El Place ID configurado no es válido. Verificá que sea el identificador ChIJ de Google Maps, no el CID numérico del perfil."
+            )
+          }
+
+          throw new Error(apiMessage ?? "No pudimos cargar las reseñas en este momento.")
         }
-        const payload = (await res.json()) as GooglePlaceDetailsRaw
-        const data = normalizePlaceReviews(payload)
+
+        const data = normalizePlaceReviews(payload as GooglePlaceDetailsRaw)
         cache.set(placeId, data)
         return data
       })
@@ -53,8 +78,8 @@ async function fetchPlaceReviews(placeId: string): Promise<PlaceReviewsData> {
 
 export function useGooglePlacesReviews(placeId: string | undefined) {
   const [state, setState] = useState<GooglePlacesReviewsState>(() => {
-    if (!placeId) {
-      return { status: "error", error: "Identificador de lugar no configurado." }
+    if (!isValidGooglePlaceId(placeId)) {
+      return { status: "error", error: getInvalidPlaceIdMessage(placeId) }
     }
     if (cache.has(placeId)) {
       return { status: "success", data: cache.get(placeId)! }
@@ -63,8 +88,8 @@ export function useGooglePlacesReviews(placeId: string | undefined) {
   })
 
   useEffect(() => {
-    if (!placeId) {
-      setState({ status: "error", error: "Identificador de lugar no configurado." })
+    if (!isValidGooglePlaceId(placeId)) {
+      setState({ status: "error", error: getInvalidPlaceIdMessage(placeId) })
       return
     }
 
