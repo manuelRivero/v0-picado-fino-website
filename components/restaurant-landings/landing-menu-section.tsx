@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { type MenuItem, formatItemPrice } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -13,7 +12,7 @@ type CategoryGroup = {
 
 type Props = {
   items: MenuItem[]
-  menuPageHref: string
+  whatsappHref?: string
   variant?: "grid" | "list"
 }
 
@@ -31,9 +30,24 @@ function groupByCategory(items: MenuItem[]): CategoryGroup[] {
   return Array.from(map.values())
 }
 
+function CartaWhatsappButton({ href }: { href?: string }) {
+  if (!href) return null
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="pf-btn-outline pf-sans"
+    >
+      Ver carta completa
+    </a>
+  )
+}
+
 export function LandingMenuSection({
   items,
-  menuPageHref,
+  whatsappHref,
   variant = "list",
 }: Props) {
   const categories = useMemo(() => groupByCategory(items), [items])
@@ -61,9 +75,7 @@ export function LandingMenuSection({
         <p className="pf-cormorant">
           El menú se actualiza desde nuestro sistema. Mientras tanto, podés ver la carta completa.
         </p>
-        <Link href={menuPageHref} className="pf-btn-outline pf-sans">
-          Ver carta completa
-        </Link>
+        <CartaWhatsappButton href={whatsappHref} />
       </div>
     )
   }
@@ -118,9 +130,7 @@ export function LandingMenuSection({
       )}
 
       <div className="le-landing-menu-footer">
-        <Link href={menuPageHref} className="pf-btn-outline pf-sans">
-          Ver carta completa
-        </Link>
+        <CartaWhatsappButton href={whatsappHref} />
       </div>
     </div>
   )

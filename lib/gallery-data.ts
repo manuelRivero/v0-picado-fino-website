@@ -41,6 +41,8 @@ const picadoFinoGallery: GalleryConfig = {
     { src: "/images/G04.jpg", alt: "Equipo de cocina en acción", category: "Cocina" },
     { src: "/images/G08.jpg", alt: "Brasas y parrilla", category: "Cocina" },
     { src: "/images/G14.jpg", alt: "Experiencia en el salón", category: "Ambiente" },
+    { src: "/images/gallery-picado-12.jpeg", alt: "Supremas de pollo apanadas con papas fritas y limón", category: "Platos" },
+    { src: "/images/gallery-picado-11.jpeg", alt: "Gift Card Picado Fino", category: "Gift Card" },
   ],
 }
 

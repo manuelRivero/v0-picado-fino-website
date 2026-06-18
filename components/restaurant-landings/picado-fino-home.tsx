@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { type MenuItem, type PublicBusiness, formatItemPrice } from "@/lib/api"
+import { type MenuItem, type PublicBusiness } from "@/lib/api"
+import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
@@ -25,15 +26,13 @@ const PICADO_FINO_EXPERIENCE_ITEMS = [
 type Props = {
   basePath: string
   otherRestaurantPath: string
-  featuredItems: MenuItem[]
+  menuItems: MenuItem[]
   business: PublicBusiness | null
 }
 
-export function PicadoFinoHome({ featuredItems, business }: Props) {
-  const { reserva: waReserva, pedido: waPedido } = getRestaurantWhatsappLinks(
-    "picado-fino",
-    business?.whatsappPhoneNumber
-  )
+export function PicadoFinoHome({ basePath, menuItems, business }: Props) {
+  const { reserva: waReserva, pedido: waPedido, carta: waCarta } =
+    getRestaurantWhatsappLinks("picado-fino", business?.whatsappPhoneNumber)
   const heroRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 
@@ -131,29 +130,21 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
       />
 
       {/* ===== MENU ===== */}
-      <section className="pf-menu-section" id="menu">
-        <div className="pf-menu-header">
-          <div>
-            <div className="pf-section-label pf-sans pf-reveal">Menú</div>
-            <h2 className="pf-reveal pf-delay-1 pf-serif">
-              Los mejores<br />cortes de la<br /><em>Argentina</em>
-            </h2>
-          </div>
-          <p className="pf-menu-header-text pf-cormorant pf-reveal pf-delay-2">
-            Trabajamos directamente con ganaderos que comparten nuestra visión de calidad. Cada corte ha sido seleccionado y madurado con el cuidado que merece.
+      <section className="le-menu-casual le-landing-menu-section" id="menu">
+        <div className="le-menu-intro le-menu-intro--compact">
+          <div className="pf-section-label pf-sans pf-reveal">Menú</div>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">
+            Los mejores<br />cortes de la<br /><em>Argentina</em>
+          </h2>
+          <p className="pf-reveal pf-delay-2 pf-cormorant">
+            Precios y platos actualizados desde nuestro sistema. Elegí una categoría y armá tu pedido.
           </p>
         </div>
-        <div className="pf-menu-grid pf-reveal">
-          {featuredItems.map((item) => (
-            <div key={item.id} className="pf-menu-item">
-              <div>
-                <div className="pf-menu-item-name pf-serif">{item.name}</div>
-                <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
-              </div>
-              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item)}</div>
-            </div>
-          ))}
-        </div>
+        <LandingMenuSection
+          items={menuItems}
+          whatsappHref={waCarta}
+          variant="list"
+        />
       </section>
 
       {business ? <BusinessHoursLocation business={business} /> : null}

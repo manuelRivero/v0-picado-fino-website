@@ -369,6 +369,21 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   background-position: center;
   will-change: transform;
 }
+.pf-hero-bg--esquina .pf-hero-bg-img {
+  object-fit: cover;
+  /* Cuadrada: en mobile recorta arriba/abajo; en desktop recorta laterales */
+  object-position: center 38%;
+}
+@media (min-width: 768px) {
+  .pf-hero-bg--esquina .pf-hero-bg-img {
+    object-position: center 44%;
+  }
+}
+@media (min-width: 1200px) {
+  .pf-hero-bg--esquina .pf-hero-bg-img {
+    object-position: center center;
+  }
+}
 .pf-hero-overlay {
   position: absolute;
   inset: 0;

@@ -10,26 +10,10 @@ import {
   RESTAURANT_SLUGS,
   type RestaurantSlug,
 } from "@/lib/restaurants"
-import { fetchBusiness, fetchFeaturedItems } from "@/lib/api"
+import { fetchBusiness, fetchMenuItems } from "@/lib/api"
+import { buildPageMetadata, RESTAURANT_HERO_META } from "@/lib/metadata"
 
 export const revalidate = 60
-
-const PAGE_META_FALLBACK: Record<
-  RestaurantSlug,
-  { title: string; description: string }
-> = {
-  "picado-fino": {
-    
-    title: "Picado Fino",
-    description:
-      "El lugar donde nos encanta ser tus anfitriones y hacerte sentir como en casa. Vení a disfrutar del verdadero asado argentino, en un ambiente ideal para compartir y con la calidez de nuestro servicio de siempre.",
-  },
-  "la-esquina": {
-    title: "La Esquina de Picado",
-    description:
-      "La misma calidad y pasión de Picado Fino en un formato más relajado. Ideal para un almuerzo, una salida con amigos o cuando querés el mejor asado sin ceremonias.",
-  },
-}
 
 export function generateStaticParams() {
   return RESTAURANT_SLUGS.map((restaurante) => ({ restaurante }))
@@ -46,7 +30,7 @@ export async function generateMetadata({
   }
 
   const slug = restaurante as RestaurantSlug
-  const fallback = PAGE_META_FALLBACK[slug]
+  const fallback = RESTAURANT_HERO_META[slug]
 
   const business = await fetchBusiness(businessIdForSlug(slug))
 
@@ -54,17 +38,7 @@ export async function generateMetadata({
     business?.description?.trim() || fallback.description
   const title = business?.name?.trim() || fallback.title
 
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-    },
-    twitter: {
-      description,
-    },
-  }
+  return buildPageMetadata({ title, description })
 }
 
 export default async function RestaurantePage({
@@ -83,8 +57,8 @@ export default async function RestaurantePage({
 
   const businessId = businessIdForSlug(slug)
 
-  const [featuredItems, business] = await Promise.all([
-    fetchFeaturedItems(businessId),
+  const [menuItems, business] = await Promise.all([
+    fetchMenuItems(businessId),
     fetchBusiness(businessId),
   ])
 
@@ -93,7 +67,7 @@ export default async function RestaurantePage({
       <PicadoFinoHome
         basePath={basePath}
         otherRestaurantPath={otherPath}
-        featuredItems={featuredItems}
+        menuItems={menuItems}
         business={business}
       />
     )
@@ -103,7 +77,7 @@ export default async function RestaurantePage({
     <LaEsquinaHome
       basePath={basePath}
       otherRestaurantPath={otherPath}
-      featuredItems={featuredItems}
+      menuItems={menuItems}
       business={business}
     />
   )

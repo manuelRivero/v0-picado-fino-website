@@ -8,6 +8,7 @@ export const WHATSAPP_MESSAGES = {
   "picado-fino": {
     reserva: "Hola quiero reservar una mesa en Picado Fino",
     pedido: "Hola quiero hacer un pedido a domicilio en Picado Fino",
+    carta: "Hola quiero consultar la carta completa de Picado Fino",
   },
   "la-esquina": {
     reserva: "Hola quiero reservar una mesa en La Esquina de Picado",
@@ -15,12 +16,14 @@ export const WHATSAPP_MESSAGES = {
     general: "Hola quiero hacer un pedido en La Esquina de Picado",
     pedidoLlevar:
       "Hola quiero un pedido para llevar o a domicilio en La Esquina de Picado",
+    carta: "Hola quiero consultar la carta completa de La Esquina de Picado",
   },
 } as const satisfies Record<
   RestaurantSlug,
   {
     reserva: string
     pedido: string
+    carta: string
     general?: string
     pedidoLlevar?: string
   }
@@ -29,6 +32,7 @@ export const WHATSAPP_MESSAGES = {
 export type RestaurantWhatsappLinks = {
   reserva?: string
   pedido?: string
+  carta?: string
   general?: string
   pedidoLlevar?: string
 }
@@ -64,6 +68,7 @@ export function getRestaurantWhatsappLinks(
   const links: RestaurantWhatsappLinks = {
     reserva: linkOrUndefined(restaurantWhatsappMeUrl(slug, apiPhone, messages.reserva)),
     pedido: linkOrUndefined(restaurantWhatsappMeUrl(slug, apiPhone, messages.pedido)),
+    carta: linkOrUndefined(restaurantWhatsappMeUrl(slug, apiPhone, messages.carta)),
   }
 
   if (slug === "la-esquina") {
@@ -75,16 +80,4 @@ export function getRestaurantWhatsappLinks(
   }
 
   return links
-}
-
-/** CTA de la página de opiniones por sede. */
-export function opinionesWhatsappUrl(
-  slug: RestaurantSlug,
-  apiPhone?: string | null
-): string | undefined {
-  const links = getRestaurantWhatsappLinks(slug, apiPhone)
-  if (slug === "la-esquina") {
-    return links.general ?? links.pedido
-  }
-  return links.reserva
 }

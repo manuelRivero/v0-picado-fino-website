@@ -1,12 +1,14 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import Image from "next/image"
 import Link from "next/link"
-import { type MenuItem, type PublicBusiness, formatItemPrice } from "@/lib/api"
+import { type MenuItem, type PublicBusiness } from "@/lib/api"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
-import image1 from "@/public/images/01-esquina.jpg"
+import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
+import heroEsquina from "@/public/images/hero-esquina.jpeg"
 import image2 from "@/public/images/02-esquina.jpg"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
@@ -16,15 +18,16 @@ import { placesIdForSlug, placesTextQueryForSlug } from "@/lib/restaurants"
 type Props = {
   basePath: string
   otherRestaurantPath: string
-  featuredItems: MenuItem[]
+  menuItems: MenuItem[]
   business: PublicBusiness | null
 }
 
-export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: Props) {
+export function LaEsquinaHome({ basePath, otherRestaurantPath, menuItems, business }: Props) {
   const links = getRestaurantWhatsappLinks("la-esquina", business?.whatsappPhoneNumber)
   const waReserva = links.reserva
   const waGeneral = links.general
   const waPedido = links.pedidoLlevar
+  const waCarta = links.carta
   const heroRef = useRef<HTMLElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 
@@ -69,11 +72,16 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
         className="pf-hero-restaurant"
       >
         <div className="pf-hero-media" aria-hidden="true">
-          <div
-            ref={parallaxRef}
-            className="pf-hero-bg"
-            style={{ backgroundImage: `url(${image1.src})` }}
-          />
+          <div ref={parallaxRef} className="pf-hero-bg pf-hero-bg--esquina">
+            <Image
+              src={heroEsquina}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="pf-hero-bg-img"
+            />
+          </div>
           <div
             className="pf-hero-overlay"
             style={{ background: "linear-gradient(to top, rgba(12,10,8,0.95) 0%, rgba(12,10,8,0.2) 85%, rgba(12,10,8,0.55) 100%)" }}
@@ -138,29 +146,21 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
         items={LA_ESQUINA_EXPERIENCE_ITEMS}
       />
 
-      <section className="pf-menu-section" id="menu">
-        <div className="pf-menu-header">
-          <div>
-            <div className="pf-section-label pf-sans pf-reveal">Menú</div>
-            <h2 className="pf-reveal pf-delay-1 pf-serif">
-              Nuestra carta<br /><em>al día</em>
-            </h2>
-          </div>
-          <p className="pf-menu-header-text pf-cormorant pf-reveal pf-delay-2">
-            Los platos destacados de La Esquina, con precios actualizados desde nuestro sistema.
+      <section className="le-menu-casual le-landing-menu-section" id="menu">
+        <div className="le-menu-intro le-menu-intro--compact">
+          <div className="pf-section-label pf-sans pf-reveal">Menú</div>
+          <h2 className="pf-reveal pf-delay-1 pf-serif">
+            Nuestra carta<br /><em>al día</em>
+          </h2>
+          <p className="pf-reveal pf-delay-2 pf-cormorant">
+            Precios y platos actualizados desde nuestro sistema. Elegí una categoría y armá tu pedido.
           </p>
         </div>
-        <div className="pf-menu-grid pf-reveal">
-          {featuredItems.map((item) => (
-            <div key={item.id} className="pf-menu-item">
-              <div>
-                <div className="pf-menu-item-name pf-serif">{item.name}</div>
-                <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
-              </div>
-              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item)}</div>
-            </div>
-          ))}
-        </div>
+        <LandingMenuSection
+          items={menuItems}
+          whatsappHref={waCarta}
+          variant="list"
+        />
       </section>
 
       {business ? <BusinessHoursLocation business={business} /> : null}

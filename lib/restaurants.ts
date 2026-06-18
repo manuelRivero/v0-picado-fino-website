@@ -52,12 +52,13 @@ export const RESTAURANT_FOOTER_SOCIAL: Record<RestaurantSlug, FooterSocialLink[]
     "picado-fino": [
       { label: "Instagram", href: "https://www.instagram.com/picadofinoparrilla/" },
       { label: "TikTok", href: "https://www.tiktok.com/@picado.fino" },
+      { label: "Facebook", href: "https://www.facebook.com/profile.php?id=100063098003357" },
     ],
     "la-esquina": [
       { label: "Instagram", href: "https://www.instagram.com/laesquinadepicado/" },
       {
         label: "TikTok",
-        href: "https://www.facebook.com/profile.php?id=100063098003357",
+        href: "https://www.tiktok.com/@laesquinadepicado",
       },
     ],
   }

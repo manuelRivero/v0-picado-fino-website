@@ -58,7 +58,7 @@ export function GalleryLandingSection({ slug, className }: Props) {
           {titleAfter}
         </button>
       </header>
-      <RestaurantGallery images={images} variant="landing" />
+      <RestaurantGallery images={images} />
     </section>
   )
 }
