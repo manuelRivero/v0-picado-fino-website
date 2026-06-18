@@ -1,99 +1,70 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { normalizePlaceReviews } from "@/lib/places/normalize"
-import type { GooglePlaceDetailsRaw, PlaceReviewsData } from "@/lib/places/types"
-import { getInvalidPlaceIdMessage, isValidGooglePlaceId } from "@/lib/places/validate"
+import { loadPlaceReviews } from "@/lib/places/client"
+import { REVIEWS_UNAVAILABLE_MESSAGE } from "@/lib/places/messages"
+import type { PlaceReviewsData } from "@/lib/places/types"
 
 export type GooglePlacesReviewsState =
   | { status: "idle" | "loading" }
   | { status: "success"; data: PlaceReviewsData }
   | { status: "error"; error: string }
 
+type UseGooglePlacesReviewsOptions = {
+  textQuery: string
+  placeId?: string
+}
+
 const cache = new Map<string, PlaceReviewsData>()
 const inflight = new Map<string, Promise<PlaceReviewsData>>()
 
-type GooglePlacesErrorResponse = {
-  error?: {
-    message?: string
-    status?: string
-  }
+function cacheKey({ textQuery, placeId }: UseGooglePlacesReviewsOptions): string {
+  return `${textQuery}::${placeId?.trim() ?? ""}`
 }
 
-async function fetchPlaceReviews(placeId: string): Promise<PlaceReviewsData> {
-  const cached = cache.get(placeId)
+async function fetchReviews(options: UseGooglePlacesReviewsOptions): Promise<PlaceReviewsData> {
+  const key = cacheKey(options)
+  const cached = cache.get(key)
   if (cached) return cached
 
-  if (!isValidGooglePlaceId(placeId)) {
-    throw new Error(getInvalidPlaceIdMessage(placeId))
-  }
-
-  const apiKey = process.env.NEXT_PUBLIC_PLACES_KEY?.trim()
-  if (!apiKey) {
-    throw new Error("Configuración de Google Places incompleta.")
-  }
-
-  let request = inflight.get(placeId)
+  let request = inflight.get(key)
   if (!request) {
-    const url = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`
-
-    request = fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": apiKey,
-        "X-Goog-FieldMask": "rating,reviews",
-      },
-    })
-      .then(async (res) => {
-        const payload = (await res.json()) as GooglePlaceDetailsRaw | GooglePlacesErrorResponse
-
-        if (!res.ok) {
-          const apiMessage =
-            "error" in payload && payload.error?.message?.trim()
-              ? payload.error.message.trim()
-              : null
-
-          if (apiMessage?.toLowerCase().includes("place id") && apiMessage.toLowerCase().includes("not valid")) {
-            throw new Error(
-              "El Place ID configurado no es válido. Verificá que sea el identificador ChIJ de Google Maps, no el CID numérico del perfil."
-            )
-          }
-
-          throw new Error(apiMessage ?? "No pudimos cargar las reseñas en este momento.")
-        }
-
-        const data = normalizePlaceReviews(payload as GooglePlaceDetailsRaw)
-        cache.set(placeId, data)
+    request = loadPlaceReviews(options)
+      .then((data) => {
+        cache.set(key, data)
         return data
       })
       .finally(() => {
-        inflight.delete(placeId)
+        inflight.delete(key)
       })
 
-    inflight.set(placeId, request)
+    inflight.set(key, request)
   }
 
   return request
 }
 
-export function useGooglePlacesReviews(placeId: string | undefined) {
+export function useGooglePlacesReviews(options: UseGooglePlacesReviewsOptions) {
+  const { textQuery, placeId } = options
+  const key = cacheKey(options)
+
   const [state, setState] = useState<GooglePlacesReviewsState>(() => {
-    if (!isValidGooglePlaceId(placeId)) {
-      return { status: "error", error: getInvalidPlaceIdMessage(placeId) }
+    if (!textQuery.trim()) {
+      return { status: "error", error: REVIEWS_UNAVAILABLE_MESSAGE }
     }
-    if (cache.has(placeId)) {
-      return { status: "success", data: cache.get(placeId)! }
+    if (cache.has(key)) {
+      return { status: "success", data: cache.get(key)! }
     }
     return { status: "loading" }
   })
 
   useEffect(() => {
-    if (!isValidGooglePlaceId(placeId)) {
-      setState({ status: "error", error: getInvalidPlaceIdMessage(placeId) })
+    if (!textQuery.trim()) {
+      setState({ status: "error", error: REVIEWS_UNAVAILABLE_MESSAGE })
       return
     }
 
-    const cached = cache.get(placeId)
+    const cached = cache.get(key)
     if (cached) {
       setState({ status: "success", data: cached })
       return
@@ -102,18 +73,15 @@ export function useGooglePlacesReviews(placeId: string | undefined) {
     let cancelled = false
     setState({ status: "loading" })
 
-    fetchPlaceReviews(placeId)
+    fetchReviews({ textQuery, placeId })
       .then((data) => {
         if (!cancelled) setState({ status: "success", data })
       })
-      .catch((error: unknown) => {
+      .catch(() => {
         if (!cancelled) {
           setState({
             status: "error",
-            error:
-              error instanceof Error
-                ? error.message
-                : "No pudimos cargar las reseñas.",
+            error: REVIEWS_UNAVAILABLE_MESSAGE,
           })
         }
       })
@@ -121,7 +89,7 @@ export function useGooglePlacesReviews(placeId: string | undefined) {
     return () => {
       cancelled = true
     }
-  }, [placeId])
+  }, [key, placeId, textQuery])
 
   return state
 }

@@ -11,13 +11,15 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel"
 import { useGooglePlacesReviews } from "@/hooks/use-google-places-reviews"
+import { REVIEWS_EMPTY_MESSAGE } from "@/lib/places/messages"
 import type { PlaceReview } from "@/lib/places/types"
 
 const AUTOPLAY_MS = 4500
 const REVIEW_TRUNCATE_LENGTH = 200
 
 type RestaurantReviewsProps = {
-  placeId: string | undefined
+  textQuery: string
+  placeId?: string
   title: string
   subtitle: string
 }
@@ -99,13 +101,27 @@ function ReviewsSkeleton() {
   )
 }
 
-function ReviewsErrorFallback({ message }: { message: string }) {
+function ReviewsEmptyFallback() {
+  return (
+    <div className="pf-reviews-fallback pf-reveal pf-visible" role="status">
+      <div className="pf-reviews-fallback-inner">
+        <Star size={22} strokeWidth={1.5} className="pf-reviews-fallback-icon" />
+        <p className="pf-reviews-fallback-title pf-serif">Sin reseñas por ahora</p>
+        <p className="pf-reviews-fallback-text pf-cormorant">{REVIEWS_EMPTY_MESSAGE}</p>
+      </div>
+    </div>
+  )
+}
+
+function ReviewsErrorFallback() {
   return (
     <div className="pf-reviews-fallback pf-reveal pf-visible" role="status">
       <div className="pf-reviews-fallback-inner">
         <Star size={22} strokeWidth={1.5} className="pf-reviews-fallback-icon" />
         <p className="pf-reviews-fallback-title pf-serif">Reseñas temporalmente no disponibles</p>
-        <p className="pf-reviews-fallback-text pf-cormorant">{message}</p>
+        <p className="pf-reviews-fallback-text pf-cormorant">
+          En este momento no podemos mostrar las reseñas. Volvé a intentar más tarde.
+        </p>
       </div>
     </div>
   )
@@ -164,7 +180,7 @@ function ReviewsCarousel({ reviews }: { reviews: PlaceReview[] }) {
 
   if (reviews.length === 0) {
     return (
-      <ReviewsErrorFallback message="Aún no hay reseñas publicadas para mostrar." />
+      <ReviewsEmptyFallback />
     )
   }
 
@@ -221,8 +237,13 @@ function ReviewsCarousel({ reviews }: { reviews: PlaceReview[] }) {
   )
 }
 
-export function RestaurantReviews({ placeId, title, subtitle }: RestaurantReviewsProps) {
-  const state = useGooglePlacesReviews(placeId)
+export function RestaurantReviews({
+  textQuery,
+  placeId,
+  title,
+  subtitle,
+}: RestaurantReviewsProps) {
+  const state = useGooglePlacesReviews({ textQuery, placeId })
 
   const overallRating = useMemo(() => {
     if (state.status !== "success") return null
@@ -254,7 +275,7 @@ export function RestaurantReviews({ placeId, title, subtitle }: RestaurantReview
 
       <div className="pf-reveal pf-delay-3">
         {state.status === "loading" ? <ReviewsSkeleton /> : null}
-        {state.status === "error" ? <ReviewsErrorFallback message={state.error} /> : null}
+        {state.status === "error" ? <ReviewsErrorFallback /> : null}
         {state.status === "success" ? <ReviewsCarousel reviews={state.data.reviews} /> : null}
       </div>
     </section>

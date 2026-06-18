@@ -28,6 +28,17 @@ export function placesIdForSlug(slug: RestaurantSlug): string {
     : process.env.NEXT_PUBLIC_PLACES_ESQUINA_ID?.trim() ?? ""
 }
 
+/** Búsqueda estable para resolver el Place ID vigente en Google Places API. */
+export const PLACES_TEXT_QUERY: Record<RestaurantSlug, string> = {
+  "picado-fino": "Picado Fino, Av. Pellegrini 3180, Rosario, Santa Fe, Argentina",
+  "la-esquina":
+    "La Esquina de Picado, Av. Pellegrini 3097, Rosario, Santa Fe, Argentina",
+}
+
+export function placesTextQueryForSlug(slug: RestaurantSlug): string {
+  return PLACES_TEXT_QUERY[slug]
+}
+
 export function fallbackWhatsappPhoneForSlug(slug: RestaurantSlug): string {
   return slug === "picado-fino"
     ? process.env.NEXT_PUBLIC_PICADO_FINO_PHONE?.trim() ?? ""

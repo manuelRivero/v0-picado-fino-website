@@ -11,6 +11,7 @@ import image2 from "@/public/images/02-esquina.jpg"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 import { RestaurantReviews } from "@/components/restaurant-landings/restaurant-reviews"
+import { placesIdForSlug, placesTextQueryForSlug } from "@/lib/restaurants"
 
 type Props = {
   basePath: string
@@ -105,7 +106,8 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
       </section>
 
       <RestaurantReviews
-        placeId={process.env.NEXT_PUBLIC_PLACES_ESQUINA_ID}
+        textQuery={placesTextQueryForSlug("la-esquina")}
+        placeId={placesIdForSlug("la-esquina") || undefined}
         title="Nuestros clientes nos recomiendan"
         subtitle="Descubrí por qué tantas personas eligen volver una y otra vez."
       />

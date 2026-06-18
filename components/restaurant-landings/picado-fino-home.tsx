@@ -7,6 +7,7 @@ import { BusinessHoursLocation } from "@/components/restaurant-landings/business
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
 import { RestaurantReviews } from "@/components/restaurant-landings/restaurant-reviews"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
+import { placesIdForSlug, placesTextQueryForSlug } from "@/lib/restaurants"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 import image1 from "@/public/images/FOTO-01.jpg"
 import image3 from "@/public/images/FOTO-03.jpg"
@@ -115,7 +116,8 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
       </section>
 
       <RestaurantReviews
-        placeId={process.env.NEXT_PUBLIC_PLACES_PICADO_ID}
+        textQuery={placesTextQueryForSlug("picado-fino")}
+        placeId={placesIdForSlug("picado-fino") || undefined}
         title="Lo que opinan nuestros clientes"
         subtitle="Experiencias reales de quienes ya disfrutaron de nuestra propuesta gastronómica."
       />
