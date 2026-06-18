@@ -5,6 +5,7 @@ import { type MenuItem, type PublicBusiness, formatItemPrice } from "@/lib/api"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
+import { RestaurantReviews } from "@/components/restaurant-landings/restaurant-reviews"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
 import image1 from "@/public/images/FOTO-01.jpg"
@@ -39,9 +40,11 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
     heroRef.current?.classList.add("pf-hero-loaded")
 
     const handleScroll = () => {
-      if (parallaxRef.current) {
-        parallaxRef.current.style.transform = `translateY(${window.scrollY * 0.4}px)`
-      }
+      if (!parallaxRef.current || !heroRef.current) return
+      const heroTop = heroRef.current.offsetTop
+      const heroHeight = heroRef.current.offsetHeight
+      const scrolled = Math.max(0, Math.min(window.scrollY - heroTop, heroHeight))
+      parallaxRef.current.style.transform = `translateY(${scrolled * 0.4}px)`
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
 
@@ -65,24 +68,26 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
   }, [])
 
   return (
-    <div className="pf-page">
+    <div className="pf-page pf-restaurant-page">
 
       {/* ===== HERO ===== */}
       <section
         ref={heroRef}
         id="hero"
-        style={{ height: "100vh", position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end" }}
+        className="pf-hero-restaurant"
       >
-        <div
-          ref={parallaxRef}
-          style={{
-            position: "absolute", inset: "-10%",
-            backgroundImage: `url(${image1.src})`,
-            backgroundSize: "cover", backgroundPosition: "center", willChange: "transform",
-          }}
-        />
-        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(10,8,7,0.95) 0%, rgba(10,8,7,0.25) 50%, rgba(10,8,7,0.6) 100%)" }} />
-        <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "780px" }}>
+        <div className="pf-hero-media" aria-hidden="true">
+          <div
+            ref={parallaxRef}
+            className="pf-hero-bg"
+            style={{ backgroundImage: `url(${image1.src})` }}
+          />
+          <div
+            className="pf-hero-overlay"
+            style={{ background: "linear-gradient(to top, rgba(10,8,7,0.95) 0%, rgba(10,8,7,0.25) 50%, rgba(10,8,7,0.6) 100%)" }}
+          />
+        </div>
+        <div className="pf-hero-restaurant-content">
           <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--brand-yellow)", marginBottom: "24px", display: "block" }}>
           Estacionamiento gratuito - Espacio para
           chicos - Atención familiar
@@ -103,11 +108,17 @@ export function PicadoFinoHome({ featuredItems, business }: Props) {
             <a href="#menu" className="pf-btn-primary pf-sans">Ver menú</a>
           </div>
         </div>
-        <div style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+        <div className="pf-hero-scroll-hint">
           <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--brand-yellow), transparent)" }} />
           <span className="pf-sans" style={{ fontSize: "9px", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--pf-body-text)", writingMode: "vertical-rl", opacity: 0.4 }}>Scroll</span>
         </div>
       </section>
+
+      <RestaurantReviews
+        placeId={process.env.NEXT_PUBLIC_PLACES_PICADO_ID}
+        title="Lo que opinan nuestros clientes"
+        subtitle="Experiencias reales de quienes ya disfrutaron de nuestra propuesta gastronómica."
+      />
 
       <ExperienceSection
         logoSrc="/images/logo-picadofino.png"

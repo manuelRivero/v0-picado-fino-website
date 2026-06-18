@@ -49,10 +49,10 @@ export function Navbar() {
     return (
       <nav className={`nav-home${isScrolled ? " scrolled" : ""}`}>
         <div className="nav-row nav-row-actions">
-          <ul className="nav-links">
-            <li><Link href="/picado-fino">Picado fino</Link></li>
-            <li><Link href="/la-esquina">La esquina de picado</Link></li>
-          </ul>
+          <div className="nav-home-ctas">
+            <Link href="/picado-fino" className="pf-btn-amber pf-sans">Picado fino</Link>
+            <Link href="/la-esquina" className="pf-btn-amber pf-sans">La esquina de picado</Link>
+          </div>
         </div>
       </nav>
     )
@@ -115,7 +115,7 @@ export function Navbar() {
           />
         </div>
         <div className="nav-row nav-row-actions">
-          <Link href="/" className="nav-back">
+          <Link href="/" className="pf-btn-primary pf-sans nav-back">
             <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
               <path d="M18 6H2M2 6L7 1M2 6L7 11" stroke="currentColor" strokeWidth="1.2"/>
             </svg>

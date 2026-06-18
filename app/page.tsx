@@ -94,7 +94,7 @@ export default function HomePage() {
       <section
         ref={heroRef}
         id="hero"
-        style={{ height: "100vh", position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end" }}
+        className="pf-hero-home"
       >
         <div
           ref={parallaxRef}
@@ -114,7 +114,7 @@ export default function HomePage() {
             background: "linear-gradient(to top, rgba(10,8,7,0.92) 0%, rgba(10,8,7,0.3) 50%, rgba(10,8,7,0.5) 100%), linear-gradient(to right, rgba(10,8,7,0.4) 0%, transparent 60%)",
           }}
         />
-        <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "900px" }}>
+        <div className="pf-hero-home-content">
           <h1 className="pf-hero-title pf-serif" style={{ fontSize: "clamp(64px, 9vw, 130px)", fontWeight: 700, lineHeight: 0.9, letterSpacing: "-0.02em", marginBottom: "32px" }}>
             <span style={{ color: "var(--brand-yellow)" }}>Picado</span><br /><em style={{ fontStyle: "italic", color: "#ffffff" }}>Fino</em>
           </h1>

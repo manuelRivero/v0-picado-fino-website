@@ -10,6 +10,7 @@ import image1 from "@/public/images/01-esquina.jpg"
 import image2 from "@/public/images/02-esquina.jpg"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
 import { GalleryLandingSection } from "@/components/restaurant-landings/gallery-landing-section"
+import { RestaurantReviews } from "@/components/restaurant-landings/restaurant-reviews"
 
 type Props = {
   basePath: string
@@ -30,9 +31,11 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
     heroRef.current?.classList.add("pf-hero-loaded")
 
     const handleScroll = () => {
-      if (parallaxRef.current) {
-        parallaxRef.current.style.transform = `translateY(${window.scrollY * 0.4}px)`
-      }
+      if (!parallaxRef.current || !heroRef.current) return
+      const heroTop = heroRef.current.offsetTop
+      const heroHeight = heroRef.current.offsetHeight
+      const scrolled = Math.max(0, Math.min(window.scrollY - heroTop, heroHeight))
+      parallaxRef.current.style.transform = `translateY(${scrolled * 0.4}px)`
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
 
@@ -56,24 +59,26 @@ export function LaEsquinaHome({ otherRestaurantPath, featuredItems, business }: 
   }, [])
 
   return (
-    <div className="pf-page le-page">
+    <div className="pf-page le-page pf-restaurant-page">
 
       {/* ===== HERO ===== */}
       <section
         ref={heroRef}
         id="hero"
-        style={{ height: "100vh", position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end" }}
+        className="pf-hero-restaurant"
       >
-        <div
-          ref={parallaxRef}
-          style={{
-              position: "absolute", inset: "-10%",
-              backgroundImage: `url(${image1.src})`,
-            backgroundSize: "cover", backgroundPosition: "center", willChange: "transform",
-          }}
-        />
-        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(12,10,8,0.95) 0%, rgba(12,10,8,0.2) 85%, rgba(12,10,8,0.55) 100%)" }} />
-        <div style={{ position: "relative", zIndex: 2, padding: "0 52px 80px", maxWidth: "780px" }}>
+        <div className="pf-hero-media" aria-hidden="true">
+          <div
+            ref={parallaxRef}
+            className="pf-hero-bg"
+            style={{ backgroundImage: `url(${image1.src})` }}
+          />
+          <div
+            className="pf-hero-overlay"
+            style={{ background: "linear-gradient(to top, rgba(12,10,8,0.95) 0%, rgba(12,10,8,0.2) 85%, rgba(12,10,8,0.55) 100%)" }}
+          />
+        </div>
+        <div className="pf-hero-restaurant-content">
           <span className="pf-hero-label pf-sans" style={{ fontSize: "9px", letterSpacing: "0.4em", textTransform: "uppercase", color: "var(--brand-yellow)", marginBottom: "24px", display: "block" }}>
           Delivery – Take away – clasicos al
           paso - cafeteria
@@ -93,11 +98,17 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
             <a href="#menu" className="pf-btn-primary pf-sans">Ver menú</a>
           </div>
         </div>
-        <div style={{ position: "absolute", bottom: "40px", right: "52px", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+        <div className="pf-hero-scroll-hint">
           <div className="pf-scroll-pulse" style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, var(--brand-yellow), transparent)" }} />
           <span className="pf-sans" style={{ fontSize: "9px", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--pf-body-text)", writingMode: "vertical-rl", opacity: 0.4 }}>Scroll</span>
         </div>
       </section>
+
+      <RestaurantReviews
+        placeId={process.env.NEXT_PUBLIC_PLACES_ESQUINA_ID}
+        title="Nuestros clientes nos recomiendan"
+        subtitle="Descubrí por qué tantas personas eligen volver una y otra vez."
+      />
 
       {/* ===== PROPUESTA ===== */}
       <section className="le-propuesta">

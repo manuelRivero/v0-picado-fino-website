@@ -22,6 +22,12 @@ export function businessIdForSlug(slug: RestaurantSlug): string {
     : process.env.NEXT_PUBLIC_LA_ESQUINA_ID?.trim() ?? ""
 }
 
+export function placesIdForSlug(slug: RestaurantSlug): string {
+  return slug === "picado-fino"
+    ? process.env.NEXT_PUBLIC_PLACES_PICADO_ID?.trim() ?? ""
+    : process.env.NEXT_PUBLIC_PLACES_ESQUINA_ID?.trim() ?? ""
+}
+
 export function fallbackWhatsappPhoneForSlug(slug: RestaurantSlug): string {
   return slug === "picado-fino"
     ? process.env.NEXT_PUBLIC_PICADO_FINO_PHONE?.trim() ?? ""
