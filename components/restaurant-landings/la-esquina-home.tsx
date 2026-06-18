@@ -7,7 +7,7 @@ import { type MenuItem, type PublicBusiness } from "@/lib/api"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
-import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
+import { LandingMenuIntro, LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import heroEsquina from "@/public/images/hero-esquina.jpeg"
 import image2 from "@/public/images/02-esquina.jpg"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
@@ -147,17 +147,11 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
       />
 
       <section className="le-menu-casual le-landing-menu-section" id="menu">
-        <div className="le-menu-intro le-menu-intro--compact">
-          <div className="pf-section-label pf-sans pf-reveal">Menú</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">
-            Nuestra carta<br /><em>al día</em>
-          </h2>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Precios y platos actualizados desde nuestro sistema. Elegí una categoría y armá tu pedido.
-          </p>
-        </div>
+        <LandingMenuIntro />
         <LandingMenuSection
           items={menuItems}
+          slug="la-esquina"
+          apiPhone={business?.whatsappPhoneNumber}
           whatsappHref={waCarta}
           variant="list"
         />

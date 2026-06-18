@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { type MenuItem, formatItemPrice } from "@/lib/api"
+import { type RestaurantSlug } from "@/lib/restaurants"
+import { menuItemWhatsappUrl } from "@/lib/whatsapp"
 import { cn } from "@/lib/utils"
 
 type CategoryGroup = {
@@ -12,8 +14,24 @@ type CategoryGroup = {
 
 type Props = {
   items: MenuItem[]
+  slug: RestaurantSlug
+  apiPhone?: string | null
   whatsappHref?: string
   variant?: "grid" | "list"
+}
+
+export function LandingMenuIntro() {
+  return (
+    <div className="le-menu-intro le-menu-intro--compact">
+      <div className="pf-section-label pf-sans pf-reveal">Menú</div>
+      <h2 className="pf-reveal pf-delay-1 pf-serif">
+        Nuestra carta<br /><em>al día</em>
+      </h2>
+      <p className="pf-reveal pf-delay-2 pf-cormorant">
+        Precios y platos actualizados. Elegí una categoría y armá tu pedido.
+      </p>
+    </div>
+  )
 }
 
 function groupByCategory(items: MenuItem[]): CategoryGroup[] {
@@ -47,6 +65,8 @@ function CartaWhatsappButton({ href }: { href?: string }) {
 
 export function LandingMenuSection({
   items,
+  slug,
+  apiPhone,
   whatsappHref,
   variant = "list",
 }: Props) {
@@ -102,30 +122,76 @@ export function LandingMenuSection({
 
       {variant === "grid" ? (
         <div className="pf-menu-grid">
-          {activeItems.map((item) => (
-            <div key={item.id} className="pf-menu-item">
-              <div>
-                <div className="pf-menu-item-name pf-serif">{item.name}</div>
-                <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
-              </div>
-              <div className="pf-menu-item-price pf-serif">{formatItemPrice(item)}</div>
-            </div>
-          ))}
+          {activeItems.map((item) => {
+            const href = menuItemWhatsappUrl(slug, apiPhone, item.name) ?? undefined
+            const content = (
+              <>
+                <div>
+                  <div className="pf-menu-item-name pf-serif">{item.name}</div>
+                  <div className="pf-menu-item-desc pf-cormorant">{item.description}</div>
+                </div>
+                <div className="pf-menu-item-price pf-serif">{formatItemPrice(item)}</div>
+              </>
+            )
+
+            if (!href) {
+              return (
+                <div key={item.id} className="pf-menu-item">
+                  {content}
+                </div>
+              )
+            }
+
+            return (
+              <a
+                key={item.id}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pf-menu-item le-menu-item-link"
+              >
+                {content}
+              </a>
+            )
+          })}
         </div>
       ) : (
         <div className="le-menu-list">
-          {activeItems.map((item, i) => (
-            <div key={item.id} className="le-menu-row">
-              <span className="le-menu-row-num pf-serif">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <div className="le-menu-row-name pf-serif">{item.name}</div>
-                <div className="le-menu-row-desc pf-cormorant">{item.description}</div>
-              </div>
-              <div className="le-menu-row-price pf-serif">{formatItemPrice(item)}</div>
-            </div>
-          ))}
+          {activeItems.map((item, i) => {
+            const href = menuItemWhatsappUrl(slug, apiPhone, item.name) ?? undefined
+            const content = (
+              <>
+                <span className="le-menu-row-num pf-serif">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <div className="le-menu-row-name pf-serif">{item.name}</div>
+                  <div className="le-menu-row-desc pf-cormorant">{item.description}</div>
+                </div>
+                <div className="le-menu-row-price pf-serif">{formatItemPrice(item)}</div>
+              </>
+            )
+
+            if (!href) {
+              return (
+                <div key={item.id} className="le-menu-row">
+                  {content}
+                </div>
+              )
+            }
+
+            return (
+              <a
+                key={item.id}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="le-menu-row le-menu-row-link"
+              >
+                {content}
+              </a>
+            )
+          })}
         </div>
       )}
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { type MenuItem, type PublicBusiness } from "@/lib/api"
-import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
+import { LandingMenuIntro, LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
 import { PicadoFinoOffersCarousel } from "@/components/restaurant-landings/picado-fino-offers-carousel"
@@ -131,17 +131,11 @@ export function PicadoFinoHome({ basePath, menuItems, business }: Props) {
 
       {/* ===== MENU ===== */}
       <section className="le-menu-casual le-landing-menu-section" id="menu">
-        <div className="le-menu-intro le-menu-intro--compact">
-          <div className="pf-section-label pf-sans pf-reveal">Menú</div>
-          <h2 className="pf-reveal pf-delay-1 pf-serif">
-            Los mejores<br />cortes de la<br /><em>Argentina</em>
-          </h2>
-          <p className="pf-reveal pf-delay-2 pf-cormorant">
-            Precios y platos actualizados desde nuestro sistema. Elegí una categoría y armá tu pedido.
-          </p>
-        </div>
+        <LandingMenuIntro />
         <LandingMenuSection
           items={menuItems}
+          slug="picado-fino"
+          apiPhone={business?.whatsappPhoneNumber}
           whatsappHref={waCarta}
           variant="list"
         />

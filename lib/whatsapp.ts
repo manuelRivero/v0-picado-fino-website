@@ -60,6 +60,18 @@ export function restaurantWhatsappMeUrl(
   return whatsappMeUrl(phone || null, message)
 }
 
+export function menuItemWhatsappUrl(
+  slug: RestaurantSlug,
+  apiPhone: string | null | undefined,
+  itemName: string
+): string | null {
+  return restaurantWhatsappMeUrl(
+    slug,
+    apiPhone,
+    `Hola vengo de la pagina web, quiero pedir ${itemName}`
+  )
+}
+
 export function getRestaurantWhatsappLinks(
   slug: RestaurantSlug,
   apiPhone?: string | null

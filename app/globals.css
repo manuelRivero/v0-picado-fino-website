@@ -1601,6 +1601,16 @@ footer { padding: 80px 52px 40px; background: #070605; border-top: 1px solid rgb
   display: grid; grid-template-columns: auto 1fr auto; gap: 24px;
   align-items: center; transition: background 0.3s; cursor: default;
 }
+.le-menu-row-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.le-menu-item-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
 .le-menu-row:hover { background: var(--pf-carbon-light); }
 .le-menu-row-num { font-size: 13px; font-style: italic; color: var(--pf-amber); opacity: 0.6; min-width: 24px; }
 .le-menu-row-name { font-size: 22px; font-weight: 600; color: var(--pf-cream); margin-bottom: 4px; }
