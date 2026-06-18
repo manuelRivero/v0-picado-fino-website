@@ -11,7 +11,7 @@ import {
   type RestaurantSlug,
 } from "@/lib/restaurants"
 import { fetchBusiness, fetchMenuItems } from "@/lib/api"
-import { buildPageMetadata, RESTAURANT_HERO_META } from "@/lib/metadata"
+import { buildPageMetadata, RESTAURANT_PAGE_META } from "@/lib/metadata"
 
 export const revalidate = 60
 
@@ -30,15 +30,14 @@ export async function generateMetadata({
   }
 
   const slug = restaurante as RestaurantSlug
-  const fallback = RESTAURANT_HERO_META[slug]
-
+  const pageMeta = RESTAURANT_PAGE_META[slug]
   const business = await fetchBusiness(businessIdForSlug(slug))
+  const title = business?.name?.trim() || pageMeta.title
 
-  const description =
-    business?.description?.trim() || fallback.description
-  const title = business?.name?.trim() || fallback.title
-
-  return buildPageMetadata({ title, description })
+  return buildPageMetadata({
+    title,
+    description: pageMeta.description,
+  })
 }
 
 export default async function RestaurantePage({

@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
-import { getOgImage, getSiteUrl } from '@/lib/metadata'
+import { getOgImage, getSiteUrl, SITE_META_DESCRIPTION } from '@/lib/metadata'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,13 +34,15 @@ const ogImage = getOgImage()
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: 'Picado Fino | Parrilla Argentina - Dos Experiencias Únicas',
-  description: 'Dos experiencias gastronómicas unidas por el fuego y la tradición. Picado Fino para ocasiones especiales y La Esquina de Picado para momentos casuales.',
+  description: SITE_META_DESCRIPTION,
   generator: 'v0.app',
   openGraph: {
+    description: SITE_META_DESCRIPTION,
     images: [ogImage],
   },
   twitter: {
     card: 'summary_large_image',
+    description: SITE_META_DESCRIPTION,
     images: [ogImage.url],
   },
   icons: {
