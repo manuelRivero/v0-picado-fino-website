@@ -7,7 +7,7 @@ import { type MenuItem, type PublicBusiness } from "@/lib/api"
 import { getRestaurantWhatsappLinks } from "@/lib/whatsapp"
 import { LA_ESQUINA_EXPERIENCE_ITEMS } from "@/lib/la-esquina-experience"
 import { BusinessHoursLocation } from "@/components/restaurant-landings/business-hours-location"
-import { LandingMenuIntro, LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
+import { LandingMenuSection } from "@/components/restaurant-landings/landing-menu-section"
 import heroEsquina from "@/public/images/01-esquina.jpg"
 import image2 from "@/public/images/02-esquina.jpg"
 import { ExperienceSection } from "@/components/restaurant-landings/experience-section"
@@ -146,15 +146,16 @@ Rotiseria, minutas y delivery con la calidad de Picado Fino. Sabores clásicos y
         items={LA_ESQUINA_EXPERIENCE_ITEMS}
       />
 
-      <section className="le-menu-casual le-landing-menu-section" id="menu">
-        <LandingMenuIntro />
-        <LandingMenuSection
-          items={menuItems}
-          slug="la-esquina"
-          apiPhone={business?.whatsappPhoneNumber}
-          whatsappHref={waCarta}
-          variant="list"
-        />
+      <section className="pf-menu-section" id="menu">
+        <div className="pf-menu-header">
+          <div>
+            <div className="pf-section-label pf-sans pf-reveal">Menú</div>
+            <h2 className="pf-reveal pf-delay-1 pf-serif">
+              Nuestra carta<br /><em>al día</em>
+            </h2>
+          </div>
+        </div>
+        <LandingMenuSection items={menuItems} whatsappHref={waCarta} />
       </section>
 
       {business ? <BusinessHoursLocation business={business} /> : null}

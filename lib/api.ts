@@ -156,18 +156,40 @@ export function formatItemPrice(item: Pick<MenuItem, "price" | "prices">): strin
   return `${p.currencyCode} ${formattedAmount}`
 }
 
-function parseMenuItemsPayload(data: unknown): MenuItem[] {
-  if (!data || typeof data !== "object") return []
+function extractItemsArray(data: unknown): unknown[] | null {
+  // Respuesta es un array directo
+  if (Array.isArray(data)) return data
+
+  if (!data || typeof data !== "object") return null
 
   const record = data as Record<string, unknown>
-  const raw =
-    record.items ??
-    record.menuItems ??
-    (record.data && typeof record.data === "object"
-      ? (record.data as Record<string, unknown>).items
-      : undefined)
 
-  if (!Array.isArray(raw)) return []
+  // { items: [...] }
+  if (Array.isArray(record.items)) return record.items as unknown[]
+
+  // { menuItems: [...] }
+  if (Array.isArray(record.menuItems)) return record.menuItems as unknown[]
+
+  // { data: [...] }
+  if (Array.isArray(record.data)) return record.data as unknown[]
+
+  // { data: { items: [...] } }
+  if (record.data && typeof record.data === "object") {
+    const inner = (record.data as Record<string, unknown>)
+    if (Array.isArray(inner.items)) return inner.items as unknown[]
+    if (Array.isArray(inner.menuItems)) return inner.menuItems as unknown[]
+  }
+
+  return null
+}
+
+function parseMenuItemsPayload(data: unknown): MenuItem[] {
+  const raw = extractItemsArray(data)
+
+  if (!raw) {
+    console.warn("[menu] formato de respuesta no reconocido:", JSON.stringify(data)?.slice(0, 300))
+    return []
+  }
 
   return raw.filter(
     (item): item is MenuItem =>
@@ -183,13 +205,22 @@ async function fetchMenuItemsFromPath(
   baseUrl: string,
   path: string
 ): Promise<MenuItem[]> {
+  const url = `${baseUrl}${path}`
   try {
-    const res = await fetch(`${baseUrl}${path}`, { next: { revalidate: 60 } })
-    if (!res.ok) return []
+    const res = await fetch(url, { next: { revalidate: 60 } })
+    if (!res.ok) {
+      console.warn("[menu] respuesta no OK:", res.status, url)
+      return []
+    }
 
     const data: unknown = await res.json()
-    return parseMenuItemsPayload(data)
-  } catch {
+    const items = parseMenuItemsPayload(data)
+    if (items.length === 0) {
+      console.warn("[menu] 0 items desde:", url, "— payload:", JSON.stringify(data)?.slice(0, 300))
+    }
+    return items
+  } catch (err) {
+    console.error("[menu] fetch error:", url, err)
     return []
   }
 }
@@ -197,14 +228,14 @@ async function fetchMenuItemsFromPath(
 /** Carta completa publicada en el backend (categorías + ítems con precio). */
 export async function fetchMenuItems(
   businessId: string,
-  limit = 100
+  limit = 10
 ): Promise<MenuItem[]> {
   const baseUrl = process.env.NEXT_PUBLIC_API?.trim()
   if (!baseUrl || !businessId) return []
 
   return fetchMenuItemsFromPath(
     baseUrl,
-    `/public/businesses/${businessId}/menu-items?limit=${limit}`
+    `/public/businesses/${businessId}/featured-items?limit=${limit}`
   )
 }
 
