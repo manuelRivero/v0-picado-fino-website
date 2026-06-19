@@ -6,7 +6,7 @@ import Link from "next/link"
 import type { StaticImageData } from "next/image"
 import image1 from "@/public/images/1.jpg"
 import image2 from "@/public/images/2.jpg"
-import image3 from "@/public/images/3.jpg"
+import heroEsquina from "@/public/images/hero-esquina.jpeg"
 import equipoCocina from "@/public/images/FOTO-04.jpg"
 import equipoFuego  from "@/public/images/FOTO-05.jpg"
 import equipoExperiencia from "@/public/images/FOTO-06.jpg"
@@ -210,7 +210,7 @@ export default function HomePage() {
         <div className="pf-rest-panel">
           <div
             className="pf-rest-panel-bg"
-            style={{ backgroundImage: `url(${image3.src})` }}
+            style={{ backgroundImage: `url(${heroEsquina.src})` }}
           />
           <div className="pf-rest-panel-overlay" />
           <div className="pf-rest-panel-content">

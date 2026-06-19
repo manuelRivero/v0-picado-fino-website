@@ -56,10 +56,18 @@ export default async function RestaurantePage({
 
   const businessId = businessIdForSlug(slug)
 
+  console.log("[menu] RestaurantePage", { slug, businessId })
+
   const [menuItems, business] = await Promise.all([
     fetchMenuItems(businessId),
     fetchBusiness(businessId),
   ])
+
+  console.log("[menu] RestaurantePage resultado", {
+    slug,
+    menuItemsCount: menuItems.length,
+    businessName: business?.name ?? null,
+  })
 
   if (slug === "picado-fino") {
     return (
