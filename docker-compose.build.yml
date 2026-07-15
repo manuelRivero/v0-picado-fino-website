@@ -1,0 +1,18 @@
+# Uso local: docker compose -f docker-compose.build.yml build
+# Requiere .env con NEXT_PUBLIC_* y DOCKER_IMAGE definidos.
+services:
+  picado-fino-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API: ${NEXT_PUBLIC_API}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        NEXT_PUBLIC_PICADO_ID: ${NEXT_PUBLIC_PICADO_ID}
+        NEXT_PUBLIC_LA_ESQUINA_ID: ${NEXT_PUBLIC_LA_ESQUINA_ID}
+        NEXT_PUBLIC_PICADO_FINO_PHONE: ${NEXT_PUBLIC_PICADO_FINO_PHONE}
+        NEXT_PUBLIC_LA_ESQUINA_PHONE: ${NEXT_PUBLIC_LA_ESQUINA_PHONE}
+        NEXT_PUBLIC_PLACES_KEY: ${NEXT_PUBLIC_PLACES_KEY}
+        NEXT_PUBLIC_PLACES_PICADO_ID: ${NEXT_PUBLIC_PLACES_PICADO_ID}
+        NEXT_PUBLIC_PLACES_ESQUINA_ID: ${NEXT_PUBLIC_PLACES_ESQUINA_ID}
+    image: ${DOCKER_IMAGE}

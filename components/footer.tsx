@@ -100,6 +100,17 @@ export function Footer() {
 
       <div className="footer-bottom">
         <span className="footer-copy">© {new Date().getFullYear()} Picado Fino. Todos los derechos reservados. Rosario.</span>
+        <div className="footer-legal-links">
+          <Link href="/privacy-policy" className="footer-legal-link">
+            Política de Privacidad
+          </Link>
+          <Link href="/terms-and-conditions" className="footer-legal-link">
+            Términos y Condiciones
+          </Link>
+          <Link href="/data-deletion-request" className="footer-legal-link">
+            Eliminación de Datos
+          </Link>
+        </div>
       </div>
     </footer>
   )

@@ -1,0 +1,14 @@
+services:
+  picado-fino-web:
+    image: ${DOCKER_IMAGE}
+    container_name: picado-fino-web
+    restart: unless-stopped
+    expose:
+      - "3000"
+    networks:
+      - npm_network
+
+networks:
+  npm_network:
+    external: true
+    name: ${NPM_NETWORK:-proxy-network}
